@@ -5,7 +5,7 @@ import {
   LineChartOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Button, Tag } from "antd";
+import { Button, Popconfirm, Tag } from "antd";
 import dayjs from "dayjs";
 import { Link, useNavigate } from "react-router";
 
@@ -21,6 +21,17 @@ interface IProps {
 const Questionnaire = (props: IProps) => {
   const { id, title, createdAt, answerCount, isPublished, isStar } = props;
   const navigate = useNavigate();
+
+  const handleStar = () => {
+    console.log("handleStar", id);
+  };
+  const handleCopy = () => {
+    console.log("handleCopy", id);
+  };
+  const handleDelete = () => {
+    console.log("handleDelete", id);
+  };
+
   return (
     <div
       key={id}
@@ -74,15 +85,37 @@ const Questionnaire = (props: IProps) => {
           </Button>
         </div>
         <div className="flex gap-6">
-          <Button type="link" icon={<StarOutlined />} className="p-0!">
+          <Button
+            type="link"
+            icon={<StarOutlined />}
+            className="p-0!"
+            onClick={handleStar}
+          >
             {isStar ? "取消标星" : "标星"}
           </Button>
-          <Button type="link" icon={<CopyOutlined />} className="p-0!">
+          <Button
+            type="link"
+            icon={<CopyOutlined />}
+            className="p-0!"
+            onClick={handleCopy}
+          >
             复制
           </Button>
-          <Button type="link" danger icon={<DeleteOutlined />} className="p-0!">
-            删除
-          </Button>
+          <Popconfirm
+            onConfirm={handleDelete}
+            title="确定删除吗？"
+            okText="确定"
+            cancelText="取消"
+          >
+            <Button
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+              className="p-0!"
+            >
+              删除
+            </Button>
+          </Popconfirm>
         </div>
       </div>
     </div>

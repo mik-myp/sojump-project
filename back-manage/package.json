@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prod": "vite --mode production",
     "build": "tsc -b && vite build",
+    "build:production": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
@@ -15,6 +17,7 @@
     "@ant-design/icons": "6.x",
     "@tailwindcss/vite": "^4.1.18",
     "antd": "^6.1.0",
+    "axios": "^1.7.9",
     "dayjs": "^1.11.19",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
