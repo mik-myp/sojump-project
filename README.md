@@ -1,10 +1,6 @@
 # Sojump 问卷调查系统
 
 <p align="center">
-  <img src="https://example.com/logo.png" alt="Sojump Logo" width="120" />
-</p>
-
-<p align="center">
   一款现代化的问卷调查系统，基于React和NestJS构建
 </p>
 
@@ -16,50 +12,21 @@ Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布�
 
 ### 前端 (back-manage)
 
-- [React](https://reactjs.org/) - 用于构建用户界面的 JavaScript 库
-- [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集，添加了静态类型定义
-- [Vite](https://vitejs.dev/) - 快速的构建工具
-- [Ant Design](https://ant.design/) - React UI 组件库
-- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
-- [React Router](https://reactrouter.com/) - React 应用的声明式路由
-- [Zustand](https://github.com/pmndrs/zustand) - 状态管理解决方案
+-   [React](https://reactjs.org/) - 用于构建用户界面的 JavaScript 库
+-   [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集，添加了静态类型定义
+-   [Vite](https://vitejs.dev/) - 快速的构建工具
+-   [Ant Design](https://ant.design/) - React UI 组件库
+-   [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
+-   [React Router](https://reactrouter.com/) - React 应用的声明式路由
+-   [Zustand](https://github.com/pmndrs/zustand) - 状态管理解决方案
 
 ### 后端 (service-manage)
 
-- [NestJS](https://nestjs.com/) - 用于构建高效、可扩展的 Node.js 服务器端应用程序的框架
-- [MongoDB](https://www.mongodb.com/) - NoSQL 数据库
-- [Mongoose](https://mongoosejs.com/) - MongoDB 对象建模工具
-- [JWT](https://jwt.io/) - JSON Web Token 实现身份验证
-- [Swagger](https://swagger.io/) - API 文档生成工具
-
-## 项目结构
-
-```
-sojump-project/
-├── back-manage/           # 前端管理系统
-│   ├── src/               # 源代码
-│   │   ├── components/    # 公共组件
-│   │   ├── layout/        # 页面布局
-│   │   ├── pages/         # 页面组件
-│   │   ├── router/        # 路由配置
-│   │   ├── service/       # API服务
-│   │   ├── store/         # 状态管理
-│   │   └── utils/         # 工具函数
-│   └── ...
-├── service-manage/        # 后端服务
-│   ├── src/               # 源代码
-│   │   ├── user/          # 用户模块
-│   │   ├── common/        # 公共模块
-│   │   └── main.ts        # 入口文件
-│   └── ...
-└── ...
-```
-
-## 环境要求
-
-- Node.js >= 16.x
-- npm 或 yarn
-- MongoDB >= 4.x
+-   [NestJS](https://nestjs.com/) - 用于构建高效、可扩展的 Node.js 服务器端应用程序的框架
+-   [MongoDB](https://www.mongodb.com/) - NoSQL 数据库
+-   [Mongoose](https://mongoosejs.com/) - MongoDB 对象建模工具
+-   [JWT](https://jwt.io/) - JSON Web Token 实现身份验证
+-   [Swagger](https://swagger.io/) - API 文档生成工具
 
 ## 快速开始
 
@@ -111,10 +78,6 @@ npm run format
 ```bash
 npm run lint
 ```
-
-### Git 提交规范
-
-项目使用 husky 配置了 git hooks，在每次提交前会自动格式化和检查代码。
 
 ## 部署
 
