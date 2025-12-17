@@ -5,47 +5,47 @@ import {
   SafetyCertificateOutlined,
   TeamOutlined,
   ThunderboltOutlined,
-} from "@ant-design/icons";
-import { Button, Card, Divider, Tag, Typography } from "antd";
-import { useNavigate } from "react-router";
+} from '@ant-design/icons';
+import { Button, Card, Divider, Tag, Typography } from 'antd';
+import { useNavigate } from 'react-router';
 
 const Home = () => {
   const navigate = useNavigate();
 
   const highlights = [
     {
-      title: "云端安全",
-      description: "全量数据加密存储与定期备份，保障问卷与答卷安全。",
+      title: '云端安全',
+      description: '全量数据加密存储与定期备份，保障问卷与答卷安全。',
       icon: <CloudOutlined />,
     },
     {
-      title: "团队协作",
-      description: "多角色权限管理，编辑、审核、发布一步到位。",
+      title: '团队协作',
+      description: '多角色权限管理，编辑、审核、发布一步到位。',
       icon: <TeamOutlined />,
     },
     {
-      title: "高效洞察",
-      description: "实时图表与导出支持，帮你快速沉淀结论与报告。",
+      title: '高效洞察',
+      description: '实时图表与导出支持，帮你快速沉淀结论与报告。',
       icon: <BarChartOutlined />,
     },
   ];
 
   const steps = [
     {
-      title: "1 分钟创建",
-      desc: "选择模板或拖拽题目，快速搭建结构。",
+      title: '1 分钟创建',
+      desc: '选择模板或拖拽题目，快速搭建结构。',
     },
     {
-      title: "一键发布",
-      desc: "链接、二维码、短信多渠道同步发布。",
+      title: '一键发布',
+      desc: '链接、二维码、短信多渠道同步发布。',
     },
     {
-      title: "实时追踪",
-      desc: "收集进度与数据质量随时掌握，异常自动提示。",
+      title: '实时追踪',
+      desc: '收集进度与数据质量随时掌握，异常自动提示。',
     },
     {
-      title: "智能分析",
-      desc: "交叉分析、数据导出，助力决策与复盘。",
+      title: '智能分析',
+      desc: '交叉分析、数据导出，助力决策与复盘。',
     },
   ];
 
@@ -93,9 +93,7 @@ const Home = () => {
               <Card className="relative rounded-2xl border-0 bg-white text-gray-900 shadow-2xl">
                 <div className="mb-4 flex items-center justify-between">
                   <div>
-                    <Typography.Text type="secondary">
-                      开始你的第一份问卷
-                    </Typography.Text>
+                    <Typography.Text type="secondary">开始你的第一份问卷</Typography.Text>
                     <Typography.Title level={4} className="mb-0!">
                       三步完成，立即使用
                     </Typography.Title>
@@ -103,14 +101,14 @@ const Home = () => {
                   <Button
                     type="primary"
                     icon={<ArrowRightOutlined />}
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate('/login')}
                   >
                     登录
                   </Button>
                 </div>
                 <Divider className="my-4!" />
                 <div className="space-y-4">
-                  {steps.map((item) => (
+                  {steps.map(item => (
                     <div
                       key={item.title}
                       className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3"
@@ -133,7 +131,7 @@ const Home = () => {
         </Card>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {highlights.map((item) => (
+          {highlights.map(item => (
             <Card key={item.title} className="shadow-md">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-600">
@@ -164,9 +162,7 @@ const Home = () => {
             </div>
             <div className="mt-6 grid grid-cols-3 gap-4 text-center">
               <div className="rounded-xl bg-slate-50 px-3 py-4">
-                <div className="text-2xl font-semibold text-blue-600">
-                  120K+
-                </div>
+                <div className="text-2xl font-semibold text-blue-600">120K+</div>
                 <div className="text-sm text-gray-500">活跃问卷</div>
               </div>
               <div className="rounded-xl bg-slate-50 px-3 py-4">

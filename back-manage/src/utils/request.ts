@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 // 定义后端返回的数据结构
 interface ApiResponse<T = unknown> {
@@ -8,19 +8,19 @@ interface ApiResponse<T = unknown> {
 }
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_API,
+  baseURL: import.meta.env.VITE_BASE_API || '',
   timeout: 10000,
   withCredentials: true,
 });
 
 // 请求拦截器
 instance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    config.headers.set("token", token || "");
+  config => {
+    const token = localStorage.getItem('token');
+    config.headers.set('token', token || '');
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   },
 );
@@ -41,37 +41,37 @@ instance.interceptors.response.use(
       // 特定状态码需要清除token并退出登录
       if (code === 401 || code === 403) {
         // 清除本地存储的token
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         // 跳转到登录页
-        window.location.href = "/login";
+        window.location.href = '/login';
       }
 
       return Promise.reject(new Error(errorMsg));
     }
   },
-  (error) => {
+  error => {
     // HTTP错误处理
-    console.error("网络错误:", error);
-    return Promise.reject(new Error("网络错误，请稍后重试"));
+    console.error('网络错误:', error);
+    return Promise.reject(new Error('网络错误，请稍后重试'));
   },
 );
 
 // 根据状态码获取错误信息
 function getMessageByCode(code: number, defaultMessage: string): string {
   const codeMessages: Record<number, string> = {
-    0: "成功",
-    1: "请求失败",
-    400: "请求参数错误",
-    401: "未授权，请重新登录",
-    403: "拒绝访问",
-    404: "请求资源未找到",
-    408: "请求超时",
-    500: "服务器内部错误",
-    501: "服务未实现",
-    502: "网关错误",
-    503: "服务不可用",
-    504: "网关超时",
-    505: "HTTP版本不受支持",
+    0: '成功',
+    1: '请求失败',
+    400: '请求参数错误',
+    401: '未授权，请重新登录',
+    403: '拒绝访问',
+    404: '请求资源未找到',
+    408: '请求超时',
+    500: '服务器内部错误',
+    501: '服务未实现',
+    502: '网关错误',
+    503: '服务不可用',
+    504: '网关超时',
+    505: 'HTTP版本不受支持',
   };
 
   // 如果有默认消息且不是"成功"，则优先使用默认消息
@@ -83,11 +83,8 @@ function getMessageByCode(code: number, defaultMessage: string): string {
   return codeMessages[code] || `未知错误(${code})`;
 }
 
-function request<T = unknown>(
-  url: string,
-  options: AxiosRequestConfig = {},
-): Promise<T> {
-  return instance({ url, ...options }).then((res) => res.data.data as T);
+function request<T = unknown>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
+  return instance({ url, ...options }).then(res => res.data.data as T);
 }
 
 export default request;

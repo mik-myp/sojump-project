@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Make scrollbars thinner and less prominent for app content */
 .app-content {

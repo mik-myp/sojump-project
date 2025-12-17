@@ -1,27 +1,23 @@
-import {
-  DeleteOutlined,
-  ReloadOutlined,
-  StarOutlined,
-} from "@ant-design/icons";
-import { Button, message, Modal, Table, Tag, type PaginationProps } from "antd";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { Link } from "react-router";
+import { DeleteOutlined, ReloadOutlined, StarOutlined } from '@ant-design/icons';
+import { Button, message, Modal, Table, Tag, type PaginationProps } from 'antd';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { Link } from 'react-router';
 
 const Trash = () => {
   const [data, setData] = useState([
     {
-      id: "1",
-      title: "问卷1",
-      createdAt: "2023-10-01T10:00:00Z",
+      id: '1',
+      title: '问卷1',
+      createdAt: '2023-10-01T10:00:00Z',
       answerCount: 5,
       isPublished: false,
       isStar: true,
     },
     {
-      id: "2",
-      title: "问卷2",
-      createdAt: "2023-10-01T10:00:00Z",
+      id: '2',
+      title: '问卷2',
+      createdAt: '2023-10-01T10:00:00Z',
       answerCount: 51,
       isPublished: true,
       isStar: false,
@@ -29,7 +25,7 @@ const Trash = () => {
   ]);
   const [loading, setLoading] = useState(false);
   const [paginationInfo, setPaginationInfo] = useState<
-    Pick<PaginationProps, "current" | "pageSize" | "total">
+    Pick<PaginationProps, 'current' | 'pageSize' | 'total'>
   >({
     current: 1,
     pageSize: 10,
@@ -39,7 +35,7 @@ const Trash = () => {
 
   const handleRestore = () => {
     if (!selectedRowKeys.length) {
-      message.error("请选择要恢复的问卷");
+      message.error('请选择要恢复的问卷');
       return;
     }
   };
@@ -48,11 +44,7 @@ const Trash = () => {
   return (
     <>
       <div className="flex gap-6 my-6">
-        <Button
-          type="primary"
-          icon={<ReloadOutlined />}
-          onClick={handleRestore}
-        >
+        <Button type="primary" icon={<ReloadOutlined />} onClick={handleRestore}>
           恢复
         </Button>
         <Button
@@ -61,11 +53,11 @@ const Trash = () => {
           icon={<DeleteOutlined />}
           onClick={() => {
             if (!selectedRowKeys.length) {
-              message.error("请选择要彻底删除的问卷");
+              message.error('请选择要彻底删除的问卷');
               return;
             }
             Modal.confirm({
-              title: "确定彻底删除吗？",
+              title: '确定彻底删除吗？',
               onOk: handlePermanentlyDelete,
             });
           }}
@@ -88,7 +80,7 @@ const Trash = () => {
         }}
         rowSelection={{
           selectedRowKeys,
-          onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
+          onChange: selectedRowKeys => setSelectedRowKeys(selectedRowKeys),
           columnWidth: 50,
         }}
         scroll={{
@@ -96,21 +88,15 @@ const Trash = () => {
         }}
         columns={[
           {
-            title: "问卷标题",
-            dataIndex: "title",
-            width: "40%",
+            title: '问卷标题',
+            dataIndex: 'title',
+            width: '40%',
             render: (text, record) => {
               const { id, isStar, isPublished } = record;
               return (
                 <div className="flex gap-2">
                   {isStar && <StarOutlined className="text-red-500!" />}
-                  <Link
-                    to={
-                      isPublished
-                        ? `/question/stat/${id}`
-                        : `/question/edit/${id}`
-                    }
-                  >
+                  <Link to={isPublished ? `/question/stat/${id}` : `/question/edit/${id}`}>
                     {text}
                   </Link>
                 </div>
@@ -118,31 +104,31 @@ const Trash = () => {
             },
           },
           {
-            title: "是否发布",
-            dataIndex: "isPublished",
-            width: "40%",
-            render: (text) =>
+            title: '是否发布',
+            dataIndex: 'isPublished',
+            width: '40%',
+            render: text =>
               text ? (
-                <Tag color={"processing"} variant="outlined">
+                <Tag color={'processing'} variant="outlined">
                   已发布
                 </Tag>
               ) : (
-                <Tag color={"default"} variant="outlined">
+                <Tag color={'default'} variant="outlined">
                   未发布
                 </Tag>
               ),
           },
           {
-            title: "答卷数量",
-            dataIndex: "answerCount",
-            width: "40%",
+            title: '答卷数量',
+            dataIndex: 'answerCount',
+            width: '40%',
           },
           {
-            title: "创建时间",
-            dataIndex: "createdAt",
-            width: "40%",
-            render: (text) => {
-              return text ? dayjs(text).format("YYYY-MM-DD HH:mm") : "--";
+            title: '创建时间',
+            dataIndex: 'createdAt',
+            width: '40%',
+            render: text => {
+              return text ? dayjs(text).format('YYYY-MM-DD HH:mm') : '--';
             },
           },
         ]}

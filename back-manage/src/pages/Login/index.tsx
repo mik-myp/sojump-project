@@ -1,15 +1,22 @@
-import { Button, Card, Form, Input, Typography, type FormProps } from "antd";
-import { Link, useNavigate } from "react-router";
+import { login } from '@/service';
+import { Button, Card, Form, Input, Typography, type FormProps } from 'antd';
+import { Link, useNavigate } from 'react-router';
 
 type LoginFormValues = {
   username: string;
   password: string;
 };
 
-const handleLogin: FormProps<LoginFormValues>["onFinish"] = () => {};
-
 const Login = () => {
   const navigate = useNavigate();
+
+  const handleLogin: FormProps<LoginFormValues>['onFinish'] = async values => {
+    try {
+      const res = await login(values);
+      localStorage.setItem('token', res.token);
+      navigate('/manage/list');
+    }catch (_error) {}
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-50 to-blue-50 px-4 py-10">
@@ -29,14 +36,14 @@ const Login = () => {
           <Form.Item
             label="用户名"
             name="username"
-            rules={[{ required: true, message: "请输入用户名" }]}
+            rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input size="large" placeholder="请输入用户名" />
           </Form.Item>
           <Form.Item
             label="密码"
             name="password"
-            rules={[{ required: true, message: "请输入密码" }]}
+            rules={[{ required: true, message: '请输入密码' }]}
           >
             <Input.Password size="large" placeholder="请输入密码" />
           </Form.Item>
@@ -46,14 +53,10 @@ const Login = () => {
         </Form>
         <div className="mt-4 text-center text-sm text-gray-600">
           没有账号？
-          <Button
-            type="link"
-            className="align-baseline p-0"
-            onClick={() => navigate("/register")}
-          >
+          <Button type="link" className="align-baseline p-0" onClick={() => navigate('/register')}>
             注册
           </Button>
-          或{" "}
+          或{' '}
           <Link to="/" className="text-blue-600 hover:text-blue-700">
             返回首页
           </Link>

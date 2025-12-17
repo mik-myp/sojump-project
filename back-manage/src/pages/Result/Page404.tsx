@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Result } from "antd";
+import React from 'react';
+import { Button, Result } from 'antd';
 
 const Page404: React.FC = () => (
   <Result

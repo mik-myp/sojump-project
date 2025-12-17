@@ -1,6 +1,6 @@
-import Questionnaire from "@/components/Questionnaire";
-import { Empty, Pagination, Spin, type PaginationProps } from "antd";
-import { useEffect, useState } from "react";
+import Questionnaire from '@/components/Questionnaire';
+import { Empty, Pagination, Spin, type PaginationProps } from 'antd';
+import { useEffect, useState } from 'react';
 
 const List = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const List = () => {
     // },
   ]);
   const [paginationInfo, setPaginationInfo] = useState<
-    Pick<PaginationProps, "current" | "pageSize" | "total">
+    Pick<PaginationProps, 'current' | 'pageSize' | 'total'>
   >({
     current: 1,
     pageSize: 10,
@@ -42,10 +42,10 @@ const List = () => {
             <div
               className="flex flex-col gap-4 pb-2.5 max-h-260 overflow-auto"
               style={{
-                scrollbarWidth: "none",
+                scrollbarWidth: 'none',
               }}
             >
-              {data.map((item) => {
+              {data.map(item => {
                 return <Questionnaire {...item} />;
               })}
             </div>
@@ -54,7 +54,7 @@ const List = () => {
               showSizeChanger
               showQuickJumper
               showTitle
-              showTotal={(total) => `总计 ${total} 条数据`}
+              showTotal={total => `总计 ${total} 条数据`}
               {...paginationInfo}
               onChange={(page, pageSize) => {
                 setPaginationInfo({
