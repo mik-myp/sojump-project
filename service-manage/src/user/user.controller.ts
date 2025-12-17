@@ -13,7 +13,7 @@ import {
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import type { Request } from 'express';
 
 @ApiTags('用户模块') // 分组
