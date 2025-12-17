@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 
 export const generateToken = async (payload: object): Promise<string> => {
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     jwt.sign(
       { ...(payload || {}) },
       secret,
@@ -12,7 +11,6 @@ export const generateToken = async (payload: object): Promise<string> => {
       },
       (err, token) => {
         if (err) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           reject(new Error(err.message));
         } else {
           resolve(token as string);
