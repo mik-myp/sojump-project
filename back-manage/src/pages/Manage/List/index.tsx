@@ -1,128 +1,84 @@
 import Questionnaire from '@/components/Questionnaire';
-import { Button, Divider, Empty, Form, Input, Modal, Skeleton } from 'antd';
-import { useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { useInfiniteScroll, useRequest } from 'ahooks';
+import { Button, Spin, Divider, Skeleton, Empty } from 'antd';
+import { useRef } from 'react';
+import { addQuestion, getQuestions } from '@/service';
+import { useNavigate } from 'react-router';
+import type { IQuestion, TQuestionsInfiniteData } from '@/service/interface';
 
+const PAGE_SIZE = 10;
 const List = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([
-    {
-      id: '1',
-      title: '问卷1',
-      createdAt: '2023-10-01T10:00:00Z',
-      answerCount: 5,
-      isPublished: false,
-      isStar: true,
+  const navigate = useNavigate();
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { data, loading, loadingMore, noMore, reload, mutate } =
+    useInfiniteScroll<TQuestionsInfiniteData>(
+      lastData => {
+        const nextPage = (lastData?.page ?? 0) + 1;
+        return getQuestions({ page: nextPage, pageSize: PAGE_SIZE, isDeleted: false }).then(
+          res => ({
+            ...res,
+            page: nextPage,
+          }),
+        );
+      },
+      {
+        target: ref,
+        isNoMore: d => (d?.list?.length ?? 0) >= (d?.total ?? 0),
+      },
+    );
+
+  const list = data?.list ?? [];
+
+  const { loading: addLoading, run: handleAdd } = useRequest(addQuestion, {
+    manual: true,
+    onSuccess: res => {
+      const { id } = res;
+      if (id) navigate(`/question/edit/${id}`);
     },
-    {
-      id: '2',
-      title: '问卷2',
-      createdAt: '2023-10-01T10:00:00Z',
-      answerCount: 51,
-      isPublished: true,
-      isStar: false,
-    },
-  ]);
-  const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const [form] = Form.useForm();
-
-  const handleOk = () => {
-    form.validateFields().then(values => {
-      setConfirmLoading(true);
-      console.log(values);
-      setTimeout(() => {
-        setOpen(false);
-        setConfirmLoading(false);
-      }, 2000);
-    });
-  };
-
-  const loadMoreData = () => {
-    // if (loading) {
-    //   return;
-    // }
-    // setLoading(true);
-    // fetch(
-    //   `https://660d2bd96ddfa2943b33731c.mockapi.io/api/users/?page=${page}&limit=10`,
-    // )
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     const results = Array.isArray(res) ? res : [];
-    //     setData([...data, ...results]);
-    //     setLoading(false);
-    //     setPage(page + 1);
-    //   })
-    //   .catch(() => {
-    //     setLoading(false);
-    //   });
-  };
-
-  // useEffect(() => {
-  //   loadMoreData();
-  // }, []);
+  });
 
   return (
-    <div className="flex flex-col gap-4 m-4">
+    <div className="flex flex-col gap-4 m-4 ">
       <div className="flex justify-end">
-        <Button type="primary" onClick={() => setOpen(true)}>
+        <Button type="primary" onClick={handleAdd} loading={addLoading}>
           新建问卷
         </Button>
       </div>
 
       <div
-        id="scrollableDiv"
         style={{
           scrollbarWidth: 'none',
         }}
-        className="h-175 overflow-auto"
+        className="h-250 overflow-auto"
+        ref={ref}
       >
-        {data.length > 0 ? (
-          <InfiniteScroll
-            dataLength={data.length}
-            next={loadMoreData}
-            hasMore={data.length < 50}
-            loader={<Skeleton paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>没有更多了 🤐</Divider>}
-            scrollableTarget="scrollableDiv"
-            className="flex flex-col gap-4 pb-2.5"
-          >
-            {data.map(item => {
-              return <Questionnaire {...item} />;
-            })}
-          </InfiniteScroll>
-        ) : (
-          <div className="flex items-center justify-center h-full w-full">
-            <Empty />
-          </div>
-        )}
+        <Spin spinning={loading}>
+          {list.length === 0 ? (
+            <div className="flex items-center justify-center h-full w-full">
+              <Empty />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 pb-2.5">
+              {list.map(item => (
+                <Questionnaire
+                  key={item._id}
+                  _id={item._id}
+                  title={item.title ?? ''}
+                  createdAt={item.createdAt ?? ''}
+                  answerCount={item.answerCount ?? 0}
+                  isPublished={Boolean(item.isPublished)}
+                  isStar={Boolean(item.isStar)}
+                  onRefresh={reload}
+                />
+              ))}
+            </div>
+          )}
+          {!noMore && loadingMore && <Skeleton paragraph={{ rows: 1 }} active />}
+          {noMore && list.length > 0 && <Divider plain>没有更多了</Divider>}{' '}
+        </Spin>
       </div>
-      <Modal
-        title="新建问卷"
-        confirmLoading={confirmLoading}
-        open={open}
-        onCancel={() => setOpen(false)}
-        centered
-        onOk={handleOk}
-        afterClose={() => form.resetFields()}
-      >
-        <Form form={form}>
-          <Form.Item
-            label="问卷标题"
-            name="title"
-            rules={[
-              {
-                required: true,
-                message: '请输入问卷标题',
-              },
-            ]}
-          >
-            <Input placeholder="请输入问卷标题" style={{ width: '100%' }} />
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
   );
 };

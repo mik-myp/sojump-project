@@ -24,6 +24,8 @@
 
 ## 问卷功能
 
+根据用户Id获取该用户的问卷列表，对问卷的操作也是对当前用户的问卷进行操作，不会影响其他用户的问卷
+
 ### 创建问卷
 
 - method `post`
@@ -64,9 +66,3 @@ PS：删除是`假删除`，实际是更新 `isDeleted` 属性
 - method `post`
 - path `/api/question/duplicate/:id`
 - response: `{ code: 0, data: { id } }`
-
-## 小结
-
-- 使用 Restful API
-- 用户验证使用 JWT （后面再讲）
-- 统一返回格式 `{ code, data, msg }`

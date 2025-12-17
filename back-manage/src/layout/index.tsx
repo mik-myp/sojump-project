@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd';
-import { Link, Outlet, useRouteLoaderData, useNavigate } from 'react-router';
+import { Link, Outlet, useRouteLoaderData, useNavigate, useLocation } from 'react-router';
 import { getUserInfo } from '@/service';
 import { useUserStore } from '@/store';
 
@@ -36,8 +36,10 @@ const siderStyle: React.CSSProperties = {
 
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const { saveUserInfo, userInfo } = useUserStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { menuList } = useRouteLoaderData('layout'); // 从src\router\index.tsx中设置的路由id获取其loader返回值
 
@@ -49,6 +51,10 @@ const App: React.FC = () => {
     (menu: { key: string; label: string; icon: React.ReactNode }) =>
       getItem(menu.label, menu.key, menu.icon),
   );
+
+  useEffect(() => {
+    setSelectedKeys([location.pathname]);
+  }, [location.pathname]);
 
   useEffect(() => {
     getUserInfo().then(res => {
@@ -65,7 +71,15 @@ const App: React.FC = () => {
         style={siderStyle}
       >
         <div className="h-8 m-4 rounded-md bg-white opacity-20" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
+        <Menu
+          theme="dark"
+          mode="inline"
+          items={menuItems}
+          selectedKeys={selectedKeys}
+          onClick={({ key, keyPath, domEvent }) => {
+            setSelectedKeys([key]);
+          }}
+        />
       </Sider>
       <Layout className="flex flex-col h-screen">
         <Header

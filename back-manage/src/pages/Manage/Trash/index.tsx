@@ -1,55 +1,67 @@
-import { DeleteOutlined, ReloadOutlined, StarOutlined } from '@ant-design/icons';
-import { Button, message, Modal, Table, Tag, type PaginationProps } from 'antd';
+import { getQuestions, removeQuestions, restoreQuestions } from '@/service';
+import { DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
+import { useAntdTable, useRequest } from 'ahooks';
+import { Button, message, Modal, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { Link } from 'react-router';
 
 const Trash = () => {
-  const [data, setData] = useState([
-    {
-      id: '1',
-      title: '问卷1',
-      createdAt: '2023-10-01T10:00:00Z',
-      answerCount: 5,
-      isPublished: false,
-      isStar: true,
-    },
-    {
-      id: '2',
-      title: '问卷2',
-      createdAt: '2023-10-01T10:00:00Z',
-      answerCount: 51,
-      isPublished: true,
-      isStar: false,
-    },
-  ]);
-  const [loading, setLoading] = useState(false);
-  const [paginationInfo, setPaginationInfo] = useState<
-    Pick<PaginationProps, 'current' | 'pageSize' | 'total'>
-  >({
-    current: 1,
-    pageSize: 10,
-    total: 0,
+  const { tableProps, refresh } = useAntdTable(getQuestions, {
+    defaultParams: [
+      {
+        isDeleted: true,
+        current: 1,
+        pageSize: 10,
+      },
+    ],
   });
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const { loading: restoreLoading, run: restoreRun } = useRequest(restoreQuestions, {
+    manual: true,
+    onSuccess: () => {
+      message.success('恢复成功');
+      setSelectedRowKeys([]);
+      refresh();
+    },
+  });
+
+  const { loading: removeLoading, run: removeRun } = useRequest(removeQuestions, {
+    manual: true,
+    onSuccess: () => {
+      message.success('彻底删除成功');
+      setSelectedRowKeys([]);
+      refresh();
+    },
+  });
 
   const handleRestore = () => {
     if (!selectedRowKeys.length) {
       message.error('请选择要恢复的问卷');
       return;
     }
+    restoreRun(selectedRowKeys as string[]);
   };
-  const handlePermanentlyDelete = () => {};
+  const handlePermanentlyDelete = () => {
+    removeRun(selectedRowKeys as string[]);
+  };
 
   return (
     <>
       <div className="flex gap-6 my-6">
-        <Button type="primary" icon={<ReloadOutlined />} onClick={handleRestore}>
+        <Button
+          type="primary"
+          loading={restoreLoading}
+          icon={<ReloadOutlined />}
+          onClick={handleRestore}
+        >
           恢复
         </Button>
         <Button
           type="primary"
           danger
+          loading={removeLoading}
           icon={<DeleteOutlined />}
           onClick={() => {
             if (!selectedRowKeys.length) {
@@ -66,18 +78,8 @@ const Trash = () => {
         </Button>
       </div>
       <Table
-        rowKey="id"
-        dataSource={data}
-        pagination={{
-          ...paginationInfo,
-          showSizeChanger: true,
-          onChange: (page, pageSize) => {
-            setPaginationInfo({
-              current: page,
-              pageSize: pageSize,
-            });
-          },
-        }}
+        rowKey="_id"
+        {...tableProps}
         rowSelection={{
           selectedRowKeys,
           onChange: selectedRowKeys => setSelectedRowKeys(selectedRowKeys),
@@ -91,17 +93,6 @@ const Trash = () => {
             title: '问卷标题',
             dataIndex: 'title',
             width: '40%',
-            render: (text, record) => {
-              const { id, isStar, isPublished } = record;
-              return (
-                <div className="flex gap-2">
-                  {isStar && <StarOutlined className="text-red-500!" />}
-                  <Link to={isPublished ? `/question/stat/${id}` : `/question/edit/${id}`}>
-                    {text}
-                  </Link>
-                </div>
-              );
-            },
           },
           {
             title: '是否发布',

@@ -5,31 +5,38 @@ import {
   LineChartOutlined,
   StarOutlined,
 } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
 import { Button, Popconfirm, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router';
+import { updateQuestion } from '@/service';
+import type { IQuestion } from '@/service/interface';
 
-interface IProps {
-  id: string;
-  title: string;
-  createdAt: string;
-  answerCount: number;
-  isPublished: boolean;
-  isStar: boolean;
-}
+type TProps = {
+  onRefresh: () => void;
+} & IQuestion;
 
-const Questionnaire = (props: IProps) => {
-  const { id, title, createdAt, answerCount, isPublished, isStar } = props;
+const Questionnaire = (props: TProps) => {
+  const { _id: id, title, createdAt, answerCount, isPublished, isStar, onRefresh } = props;
+
   const navigate = useNavigate();
+
+  const { run, loading: updateLoading } = useRequest(updateQuestion, {
+    manual: true,
+    onSuccess: onRefresh,
+  });
 
   const handleStar = () => {
     console.log('handleStar', id);
+    run({ id, isStar: !isStar });
   };
   const handleCopy = () => {
     console.log('handleCopy', id);
+    // run({ id, isStar: !isStar });
   };
   const handleDelete = () => {
     console.log('handleDelete', id);
+    run({ id, isDeleted: true });
   };
 
   return (
@@ -79,14 +86,26 @@ const Questionnaire = (props: IProps) => {
           </Button>
         </div>
         <div className="flex gap-6">
-          <Button type="link" icon={<StarOutlined />} className="p-0!" onClick={handleStar}>
+          <Button
+            loading={updateLoading}
+            type="link"
+            icon={<StarOutlined />}
+            className="p-0!"
+            onClick={handleStar}
+          >
             {isStar ? '取消标星' : '标星'}
           </Button>
           <Button type="link" icon={<CopyOutlined />} className="p-0!" onClick={handleCopy}>
             复制
           </Button>
           <Popconfirm onConfirm={handleDelete} title="确定删除吗？" okText="确定" cancelText="取消">
-            <Button type="link" danger icon={<DeleteOutlined />} className="p-0!">
+            <Button
+              loading={updateLoading}
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+              className="p-0!"
+            >
               删除
             </Button>
           </Popconfirm>

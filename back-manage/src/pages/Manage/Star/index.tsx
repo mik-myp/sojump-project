@@ -1,43 +1,24 @@
 import Questionnaire from '@/components/Questionnaire';
-import { Empty, Pagination, Spin, type PaginationProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { getQuestions } from '@/service';
+import { usePagination } from 'ahooks';
+import { Empty, Pagination, Spin } from 'antd';
 
 const List = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([
-    // {
-    //   id: "1",
-    //   title: "问卷1",
-    //   createdAt: "2023-10-01T10:00:00Z",
-    //   answerCount: 5,
-    //   isPublished: false,
-    //   isStar: true,
-    // },
-    // {
-    //   id: "2",
-    //   title: "问卷2",
-    //   createdAt: "2023-10-01T10:00:00Z",
-    //   answerCount: 51,
-    //   isPublished: true,
-    //   isStar: false,
-    // },
-  ]);
-  const [paginationInfo, setPaginationInfo] = useState<
-    Pick<PaginationProps, 'current' | 'pageSize' | 'total'>
-  >({
-    current: 1,
-    pageSize: 10,
-    total: 0,
+  const { data, loading, pagination, refresh } = usePagination(getQuestions, {
+    defaultParams: [
+      {
+        isStar: true,
+        current: 1,
+        pageSize: 10,
+      },
+    ],
   });
 
-  useEffect(() => {
-    console.log(paginationInfo);
-  }, [paginationInfo]);
-
+  const list = data?.list || [];
   return (
     <Spin spinning={loading}>
       <div className="flex flex-col gap-8 m-4">
-        {data.length > 0 ? (
+        {list.length > 0 ? (
           <>
             <div
               className="flex flex-col gap-4 pb-2.5 max-h-260 overflow-auto"
@@ -45,23 +26,17 @@ const List = () => {
                 scrollbarWidth: 'none',
               }}
             >
-              {data.map(item => {
-                return <Questionnaire {...item} />;
+              {list.map(item => {
+                return <Questionnaire key={item._id} {...item} onRefresh={refresh} />;
               })}
             </div>
             <Pagination
+              {...pagination}
               align="center"
               showSizeChanger
               showQuickJumper
               showTitle
               showTotal={total => `总计 ${total} 条数据`}
-              {...paginationInfo}
-              onChange={(page, pageSize) => {
-                setPaginationInfo({
-                  current: page,
-                  pageSize: pageSize,
-                });
-              }}
             />
           </>
         ) : (
