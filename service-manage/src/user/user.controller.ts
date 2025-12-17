@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Header,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -40,29 +29,6 @@ export class UserController {
   @ApiOperation({ summary: '获取用户信息' })
   getUserInfo(@Req() req: Request) {
     const user = (req as { user?: { _id?: string } }).user;
-
-    console.log('🚀 ~ user.controller.ts:44 ~ UserController ~ getUserInfo ~ user:', user);
-
     return this.userService.getUserInfo(user?._id);
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
 }
