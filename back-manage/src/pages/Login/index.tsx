@@ -15,7 +15,7 @@ const Login = () => {
       const res = await login(values);
       localStorage.setItem('token', res.token);
       navigate('/manage/list');
-    }catch (_error) {}
+    } catch (_error) {}
   };
 
   return (

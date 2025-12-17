@@ -33,7 +33,7 @@ export default tseslint.config(
         },
       ],
       '@typescript-eslint/no-empty': 'off',
-      'no-empty-pattern':'off'
+      'no-empty-pattern': 'off',
     },
   },
 );
