@@ -10,7 +10,7 @@
   "scripts": {
     "prepare": "husky install",
     "format": "prettier --write .",
-    "lint": "echo '暂时跳过lint检查'",
+    "lint": "npm run lint:back && npm run lint:service",
     "lint:fix": "npm run lint:back && npm run lint:service",
     "format:back": "cd back-manage && npm run format",
     "lint:back": "cd back-manage && npm run lint",
