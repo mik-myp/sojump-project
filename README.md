@@ -15,6 +15,7 @@ Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布�
 ## 技术栈
 
 ### 前端 (back-manage)
+
 - [React](https://reactjs.org/) - 用于构建用户界面的 JavaScript 库
 - [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集，添加了静态类型定义
 - [Vite](https://vitejs.dev/) - 快速的构建工具
@@ -24,6 +25,7 @@ Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布�
 - [Zustand](https://github.com/pmndrs/zustand) - 状态管理解决方案
 
 ### 后端 (service-manage)
+
 - [NestJS](https://nestjs.com/) - 用于构建高效、可扩展的 Node.js 服务器端应用程序的框架
 - [MongoDB](https://www.mongodb.com/) - NoSQL 数据库
 - [Mongoose](https://mongoosejs.com/) - MongoDB 对象建模工具
