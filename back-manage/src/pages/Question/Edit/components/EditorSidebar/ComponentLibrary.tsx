@@ -25,10 +25,12 @@ type TComponentItem =
 // 定义组件组
 const COMPONENT_GROUP: {
   title: string;
+  id: string;
   components: TComponentItem[];
 }[] = [
   {
     title: '文本显示',
+    id: 'text-show',
     components: [
       {
         type: 'questionTitle',
@@ -39,6 +41,7 @@ const COMPONENT_GROUP: {
   },
   {
     title: '用户输入',
+    id: 'user-input',
     components: [
       {
         type: 'questionInput',
@@ -64,14 +67,14 @@ const ComponentLibrary = () => {
     <div>
       {COMPONENT_GROUP.map(group => {
         return (
-          <div className="mb-8">
+          <div className="mb-8" key={group.id}>
             <div className="text-xl font-bold mb-4">{group.title}</div>
             <div className="flex flex-col gap-4">
-              {group.components.map((item, index) => (
+              {group.components.map(item => (
                 <div
                   className="bg-gray-100 p-4 rounded-md select-none"
                   onClick={() => handleAdd(item)}
-                  key={index}
+                  key={item.type}
                 >
                   <div className="pointer-events-none">
                     <item.component />
