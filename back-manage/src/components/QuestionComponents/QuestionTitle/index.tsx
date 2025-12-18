@@ -17,7 +17,14 @@ const QuestionTitle = (props: TQuestionTitleProps) => {
   const { level = 1, text = '一行标题', align = 'left' } = { ...defaultTitleProps, ...props };
 
   return (
-    <Typography.Title level={level} className={classNames('mb-0!', `text-${align}`)}>
+    <Typography.Title
+      level={level}
+      className={classNames('mb-0!', {
+        ['text-left']: align === 'left',
+        ['text-center']: align === 'center',
+        ['text-right']: align === 'right',
+      })}
+    >
       {text}
     </Typography.Title>
   );
