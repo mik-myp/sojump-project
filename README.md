@@ -1,6 +1,10 @@
 # Sojump 问卷调查系统
 
 <p align="center">
+  <img src="./back-manage/public/sojump.jpg" alt="Sojump Logo" width="120" />
+</p>
+
+<p align="center">
   一款现代化的问卷调查系统，基于React和NestJS构建
 </p>
 

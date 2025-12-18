@@ -32,15 +32,12 @@ const Questionnaire = (props: TProps) => {
   });
 
   const handleStar = () => {
-    console.log('handleStar', id);
     updateRun({ id, isStar: !isStar });
   };
   const handleCopy = () => {
-    console.log('handleCopy', id);
     copyRun({ id });
   };
   const handleDelete = () => {
-    console.log('handleDelete', id);
     updateRun({ id, isDeleted: true });
   };
 

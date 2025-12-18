@@ -41,7 +41,6 @@ export class QuestionnaireService {
         : 10;
 
     const filter: Record<string, unknown> & { userId: string } = { userId };
-    console.log(query, typeof query.isDeleted, typeof query.isStar);
 
     if (typeof query.isDeleted === 'string') {
       filter.isDeleted = query.isDeleted === 'true';
