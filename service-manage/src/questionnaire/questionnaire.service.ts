@@ -22,7 +22,7 @@ export class QuestionnaireService {
   async create(userId: string) {
     const doc = await this.questionnaireModel.create({
       title: `新建 ${Date.now()}`,
-      questionList: [],
+      componentList: [],
       isPublished: false,
       isStar: false,
       isDeleted: false,
@@ -30,7 +30,7 @@ export class QuestionnaireService {
       userId,
     });
 
-    return { code: 0, data: { id: doc._id } };
+    return { code: 0, data: { id: doc._id }, message: 'success' };
   }
 
   async findAll(userId: string, query: ListQuery) {
@@ -59,7 +59,7 @@ export class QuestionnaireService {
       this.questionnaireModel.countDocuments(filter),
     ]);
 
-    return { code: 0, data: { list, total } };
+    return { code: 0, data: { list, total }, message: 'success' };
   }
 
   async findOne(id: string, userId: string) {
@@ -77,7 +77,7 @@ export class QuestionnaireService {
       return { code: 404, message: '未找到问卷', data: null };
     }
 
-    return { code: 0, data: questionnaire };
+    return { code: 0, data: questionnaire, message: 'success' };
   }
 
   async update(id: string, updateQuestionnaireDto: UpdateQuestionnaireDto, userId: string) {
@@ -87,7 +87,7 @@ export class QuestionnaireService {
 
     const payload: Record<string, unknown> = {};
     (
-      ['title', 'questionList', 'isPublished', 'isStar', 'isDeleted', 'answerCount'] as const
+      ['title', 'componentList', 'isPublished', 'isStar', 'isDeleted', 'answerCount'] as const
     ).forEach(key => {
       const value = updateQuestionnaireDto[key];
       if (value !== undefined) {
@@ -105,7 +105,7 @@ export class QuestionnaireService {
       return { code: 404, message: '未找到问卷', data: null };
     }
 
-    return { code: 0, data: questionnaire };
+    return { code: 0, data: questionnaire, message: 'success' };
   }
 
   async restore(ids: string[], userId: string) {
@@ -129,7 +129,7 @@ export class QuestionnaireService {
       },
     );
 
-    return { code: 0 };
+    return { code: 0, data: null, message: 'success' };
   }
   async remove(ids: string[], userId: string) {
     if (!Array.isArray(ids) || ids.length === 0) {
@@ -146,7 +146,7 @@ export class QuestionnaireService {
       userId,
     });
 
-    return { code: 0 };
+    return { code: 0, data: null, message: 'success' };
   }
 
   async duplicate(id: string, userId: string) {
@@ -166,7 +166,7 @@ export class QuestionnaireService {
 
     const duplicated = await this.questionnaireModel.create({
       title: `${questionnaire.title} - 复制`,
-      questionList: questionnaire.questionList ?? [],
+      componentList: questionnaire.componentList ?? [],
       isPublished: false,
       isStar: false,
       isDeleted: false,
@@ -174,6 +174,6 @@ export class QuestionnaireService {
       userId,
     });
 
-    return { code: 0, data: { id: duplicated._id } };
+    return { code: 0, data: { id: duplicated._id }, message: 'success' };
   }
 }

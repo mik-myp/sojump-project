@@ -50,7 +50,7 @@ export async function updateQuestion(
 }
 
 export async function restoreQuestions(ids: string[]) {
-  return request<IQuestion[]>(`/question`, {
+  return request(`/question`, {
     method: 'PATCH',
     data: {
       ids,
@@ -59,7 +59,7 @@ export async function restoreQuestions(ids: string[]) {
 }
 
 export async function removeQuestions(ids: string[]) {
-  return request<IQuestion[]>(`/question`, {
+  return request(`/question`, {
     method: 'DELETE',
     data: {
       ids,
@@ -67,7 +67,15 @@ export async function removeQuestions(ids: string[]) {
   });
 }
 export async function copyQuestion(data: { id: string }) {
-  return request<IQuestion>(`/question/duplicate/${data.id}`, {
+  return request<{
+    id: string;
+  }>(`/question/duplicate/${data.id}`, {
     method: 'POST',
+  });
+}
+
+export async function getQuestion(data: { id: string }) {
+  return request<IQuestion>(`/question/${data.id}`, {
+    method: 'GET',
   });
 }

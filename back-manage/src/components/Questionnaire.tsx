@@ -73,7 +73,7 @@ const Questionnaire = (props: TProps) => {
             type="link"
             icon={<EditOutlined />}
             className="p-0!"
-            onClick={() => navigate('/question/edit/1')}
+            onClick={() => navigate(`/question/edit/${id}`)}
             disabled={isPublished}
           >
             编辑问卷
@@ -82,7 +82,7 @@ const Questionnaire = (props: TProps) => {
             type="link"
             icon={<LineChartOutlined />}
             className="p-0!"
-            onClick={() => navigate('/question/stat/1')}
+            onClick={() => navigate(`/question/stat/${id}`)}
           >
             问卷统计
           </Button>

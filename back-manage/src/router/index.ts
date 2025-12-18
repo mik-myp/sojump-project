@@ -12,6 +12,8 @@ import Stat from '@/pages/Question/Stat';
 import Page404 from '@/pages/Result/Page404';
 import Page403 from '@/pages/Result/Page403';
 import AuthLoader from './AuthLoader';
+import Manage from '@/layout/Manage';
+import Question from '@/layout/Question';
 
 export const routes: RouteObject[] = [
   {
@@ -35,48 +37,57 @@ export const routes: RouteObject[] = [
         loader: AuthLoader,
         children: [
           {
-            path: 'manage',
+            Component: Manage,
             children: [
               {
-                path: 'list',
-                Component: List,
-              },
-              {
-                path: 'star',
-                Component: Star,
-              },
-              {
-                path: 'trash',
-                Component: Trash,
+                path: 'manage',
+                children: [
+                  {
+                    path: 'list',
+                    Component: List,
+                  },
+                  {
+                    path: 'star',
+                    Component: Star,
+                  },
+                  {
+                    path: 'trash',
+                    Component: Trash,
+                  },
+                ],
               },
             ],
           },
           {
-            path: 'question',
+            Component: Question,
             children: [
               {
-                path: 'edit/:id',
-                Component: Edit,
-              },
-              {
-                path: 'stat/:id',
-                Component: Stat,
+                path: 'question',
+                children: [
+                  {
+                    path: 'edit/:id',
+                    Component: Edit,
+                  },
+                  {
+                    path: 'stat/:id',
+                    Component: Stat,
+                  },
+                ],
               },
             ],
-          },
-          {
-            path: '404',
-            Component: Page404,
-          },
-          {
-            path: '403',
-            Component: Page403,
           },
         ],
       },
     ],
   },
-
+  {
+    path: '404',
+    Component: Page404,
+  },
+  {
+    path: '403',
+    Component: Page403,
+  },
   {
     path: '*',
     Component: () => createElement(Navigate, { to: '/404', replace: true }),

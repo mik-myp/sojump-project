@@ -9,7 +9,7 @@ export class Questionnaire {
   title: string;
 
   @Prop({ type: [SchemaTypes.Mixed], default: [] })
-  questionList: Array<Record<string, unknown>>;
+  componentList: Array<Record<string, unknown>>;
 
   @Prop({ default: false })
   isPublished: boolean;

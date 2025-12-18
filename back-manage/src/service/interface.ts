@@ -5,9 +5,9 @@ export interface ILoginParams {
 
 export interface IUserInfo {
   _id: string;
-  username: string;
-  createdAt: string;
-  updatedAt: string;
+  username?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IQuestionParams {
@@ -16,10 +16,18 @@ export interface IQuestionParams {
   isDeleted?: boolean;
 }
 
+export type TComponentType = 'questionTitle' | 'questionInput';
+
+export interface IComponent {
+  id?: string;
+  type?: TComponentType;
+  props?: Record<string, unknown>;
+}
+
 export interface IQuestion {
   _id: string;
   title?: string;
-  questionList?: Array<Record<string, unknown>>;
+  componentList?: Array<IComponent>;
   answerCount?: number;
   isStar?: boolean;
   isPublished?: boolean;

@@ -37,21 +37,22 @@ const List = () => {
   });
 
   return (
-    <div className="flex flex-col gap-4 m-4 ">
-      <div className="flex justify-end">
-        <Button type="primary" onClick={handleAdd} loading={addLoading}>
-          新建问卷
-        </Button>
-      </div>
+    <>
+      <Spin spinning={loading} fullscreen />
+      <div className="flex flex-col gap-4 m-4 ">
+        <div className="flex justify-end">
+          <Button type="primary" onClick={handleAdd} loading={addLoading}>
+            新建问卷
+          </Button>
+        </div>
 
-      <div
-        style={{
-          scrollbarWidth: 'none',
-        }}
-        className="h-250 overflow-auto"
-        ref={ref}
-      >
-        <Spin spinning={loading}>
+        <div
+          style={{
+            scrollbarWidth: 'none',
+          }}
+          className="h-250 overflow-auto"
+          ref={ref}
+        >
           {list.length === 0 ? (
             <div className="flex items-center justify-center h-full w-full">
               <Empty />
@@ -74,9 +75,9 @@ const List = () => {
           )}
           {!noMore && loadingMore && <Skeleton paragraph={{ rows: 1 }} active />}
           {noMore && list.length > 0 && <Divider plain>没有更多了</Divider>}{' '}
-        </Spin>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

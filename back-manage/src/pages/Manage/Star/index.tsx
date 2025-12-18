@@ -16,7 +16,8 @@ const List = () => {
 
   const list = data?.list || [];
   return (
-    <Spin spinning={loading}>
+    <>
+      <Spin spinning={loading} fullscreen />
       <div className="flex flex-col gap-8 m-4">
         {list.length > 0 ? (
           <>
@@ -45,7 +46,7 @@ const List = () => {
           </div>
         )}
       </div>
-    </Spin>
+    </>
   );
 };
 

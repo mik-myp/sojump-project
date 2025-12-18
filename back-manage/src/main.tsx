@@ -11,7 +11,12 @@ import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');
 
 createRoot(document.getElementById('root')!).render(
-  <ConfigProvider locale={zhCN}>
+  <ConfigProvider
+    locale={zhCN}
+    tooltip={{
+      unique: true,
+    }}
+  >
     <App>
       <RouterProvider router={router} />
     </App>

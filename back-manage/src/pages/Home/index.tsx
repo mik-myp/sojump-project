@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router';
 const Home = () => {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
+
   const highlights = [
     {
       title: '云端安全',
@@ -101,9 +103,9 @@ const Home = () => {
                   <Button
                     type="primary"
                     icon={<ArrowRightOutlined />}
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate(token ? 'manage/list' : '/login')}
                   >
-                    登录
+                    {token ? '进入系统' : '登录'}
                   </Button>
                 </div>
                 <Divider className="my-4!" />

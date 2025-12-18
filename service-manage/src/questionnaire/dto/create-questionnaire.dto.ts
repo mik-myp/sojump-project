@@ -5,7 +5,7 @@ export class CreateQuestionnaireDto {
   title?: string;
 
   @ApiPropertyOptional({ description: '问题列表', type: [Object], default: [] })
-  questionList?: Array<Record<string, unknown>>;
+  componentList?: Array<Record<string, unknown>>;
 
   @ApiPropertyOptional({ description: '问卷是否已发布', default: false })
   isPublished?: boolean;
