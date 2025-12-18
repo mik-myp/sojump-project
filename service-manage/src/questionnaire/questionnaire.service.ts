@@ -39,11 +39,16 @@ export class QuestionnaireService {
       Number.isFinite(query.pageSize) && (query.pageSize as number) > 0
         ? Number(query.pageSize)
         : 10;
-    const isDeleted = query.isDeleted ?? false;
 
-    const isStar = query.isStar ?? true;
+    const filter: Record<string, unknown> & { userId: string } = { userId };
+    console.log(query, typeof query.isDeleted, typeof query.isStar);
 
-    const filter: Record<string, unknown> & { userId: string } = { userId, isDeleted, isStar };
+    if (typeof query.isDeleted === 'string') {
+      filter.isDeleted = query.isDeleted === 'true';
+    }
+    if (typeof query.isStar === 'string') {
+      filter.isStar = query.isStar === 'true';
+    }
 
     const [list, total] = await Promise.all([
       this.questionnaireModel

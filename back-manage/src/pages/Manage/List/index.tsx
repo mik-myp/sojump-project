@@ -4,7 +4,7 @@ import { Button, Spin, Divider, Skeleton, Empty } from 'antd';
 import { useRef } from 'react';
 import { addQuestion, getQuestions } from '@/service';
 import { useNavigate } from 'react-router';
-import type { IQuestion, TQuestionsInfiniteData } from '@/service/interface';
+import type { TQuestionsInfiniteData } from '@/service/interface';
 
 const PAGE_SIZE = 10;
 const List = () => {
@@ -12,22 +12,19 @@ const List = () => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, loading, loadingMore, noMore, reload, mutate } =
-    useInfiniteScroll<TQuestionsInfiniteData>(
-      lastData => {
-        const nextPage = (lastData?.page ?? 0) + 1;
-        return getQuestions({ page: nextPage, pageSize: PAGE_SIZE, isDeleted: false }).then(
-          res => ({
-            ...res,
-            page: nextPage,
-          }),
-        );
-      },
-      {
-        target: ref,
-        isNoMore: d => (d?.list?.length ?? 0) >= (d?.total ?? 0),
-      },
-    );
+  const { data, loading, loadingMore, noMore, reload } = useInfiniteScroll<TQuestionsInfiniteData>(
+    lastData => {
+      const nextPage = (lastData?.page ?? 0) + 1;
+      return getQuestions({ page: nextPage, pageSize: PAGE_SIZE, isDeleted: false }).then(res => ({
+        ...res,
+        page: nextPage,
+      }));
+    },
+    {
+      target: ref,
+      isNoMore: d => (d?.list?.length ?? 0) >= (d?.total ?? 0),
+    },
+  );
 
   const list = data?.list ?? [];
 

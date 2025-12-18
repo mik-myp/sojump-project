@@ -9,7 +9,7 @@ import { useRequest } from 'ahooks';
 import { Button, Popconfirm, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router';
-import { updateQuestion } from '@/service';
+import { copyQuestion, updateQuestion } from '@/service';
 import type { IQuestion } from '@/service/interface';
 
 type TProps = {
@@ -21,22 +21,27 @@ const Questionnaire = (props: TProps) => {
 
   const navigate = useNavigate();
 
-  const { run, loading: updateLoading } = useRequest(updateQuestion, {
+  const { run: updateRun, loading: updateLoading } = useRequest(updateQuestion, {
+    manual: true,
+    onSuccess: onRefresh,
+  });
+
+  const { run: copyRun, loading: copyLoading } = useRequest(copyQuestion, {
     manual: true,
     onSuccess: onRefresh,
   });
 
   const handleStar = () => {
     console.log('handleStar', id);
-    run({ id, isStar: !isStar });
+    updateRun({ id, isStar: !isStar });
   };
   const handleCopy = () => {
     console.log('handleCopy', id);
-    // run({ id, isStar: !isStar });
+    copyRun({ id });
   };
   const handleDelete = () => {
     console.log('handleDelete', id);
-    run({ id, isDeleted: true });
+    updateRun({ id, isDeleted: true });
   };
 
   return (
@@ -95,7 +100,13 @@ const Questionnaire = (props: TProps) => {
           >
             {isStar ? '取消标星' : '标星'}
           </Button>
-          <Button type="link" icon={<CopyOutlined />} className="p-0!" onClick={handleCopy}>
+          <Button
+            loading={copyLoading}
+            type="link"
+            icon={<CopyOutlined />}
+            className="p-0!"
+            onClick={handleCopy}
+          >
             复制
           </Button>
           <Popconfirm onConfirm={handleDelete} title="确定删除吗？" okText="确定" cancelText="取消">

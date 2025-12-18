@@ -66,3 +66,8 @@ export async function removeQuestions(ids: string[]) {
     },
   });
 }
+export async function copyQuestion(data: { id: string }) {
+  return request<IQuestion>(`/question/duplicate/${data.id}`, {
+    method: 'POST',
+  });
+}
