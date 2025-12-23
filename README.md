@@ -12,105 +12,104 @@
 
 Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布和管理各种类型的问卷调查。系统采用前后端分离架构，前端使用 React 构建，后端使用 NestJS 提供 RESTful API 服务。
 
-## 技术栈
+## 目录结构（简要）
 
-### 前端 (back-manage)
+-   `back-manage/`：前端项目（React + TypeScript + Vite）
+-   `service-manage/`：后端项目（NestJS）
 
--   [React](https://reactjs.org/) - 用于构建用户界面的 JavaScript 库
--   [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集，添加了静态类型定义
--   [Vite](https://vitejs.dev/) - 快速的构建工具
--   [Ant Design](https://ant.design/) - React UI 组件库
--   [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
--   [React Router](https://reactrouter.com/) - React 应用的声明式路由
--   [Zustand](https://github.com/pmndrs/zustand) - 状态管理解决方案
+## 使用的技术栈
 
-### 后端 (service-manage)
+-   前端（back-manage）
 
--   [NestJS](https://nestjs.com/) - 用于构建高效、可扩展的 Node.js 服务器端应用程序的框架
--   [MongoDB](https://www.mongodb.com/) - NoSQL 数据库
--   [Mongoose](https://mongoosejs.com/) - MongoDB 对象建模工具
--   [JWT](https://jwt.io/) - JSON Web Token 实现身份验证
--   [Swagger](https://swagger.io/) - API 文档生成工具
+    -   React, TypeScript, Vite
+    -   UI：Ant Design
+    -   样式：Tailwind CSS
+    -   路由：React Router
+    -   状态管理：Zustand
+    -   常用库：react-beautiful-dnd、ahooks、axios
 
-## 快速开始
+-   后端（service-manage）
 
-### 克隆项目
+    -   NestJS, TypeScript
+    -   数据库：MongoDB + Mongoose
+    -   认证：JWT
+    -   文档：Swagger
+
+-   开发/工具链
+    -   代码检查：ESLint
+    -   代码格式化：Prettier
+    -   包管理/运行：npm / Node.js
+    -   测试：Jest (后端 e2e 示例)
+
+## 快速开始（本地开发）
+
+先克隆项目并安装根依赖：
 
 ```bash
 git clone <repository-url>
 cd sojump-project
-```
-
-### 安装依赖
-
-```bash
 npm install
 ```
 
-### 启动后端服务
+启动后端（开发模式）：
 
 ```bash
 cd service-manage
+npm install
 npm run start:dev
 ```
 
-默认情况下，后端服务将在 `http://localhost:3000` 上运行。
+默认后端地址：`http://localhost:3000`
 
-### 启动前端应用
+在另一个终端启动前端：
 
 ```bash
 cd back-manage
+npm install
 npm run dev
 ```
 
-默认情况下，前端应用将在 `http://localhost:5173` 上运行。
+默认前端地址：`http://localhost:5173`
 
-## 开发指南
+如果你只想启动前端（通常本地用 mock 或已连接后端），进入 `back-manage` 并运行 `npm run dev` 即可。
 
-### 代码格式化
+## 常用脚本
 
-项目使用 Prettier 进行代码格式化，可以通过以下命令格式化所有代码：
+-   根目录：
+    -   `npm install`：安装根依赖（如果需要）
+-   `back-manage`：
+    -   `npm run dev`：启动前端开发服务器
+    -   `npm run build`：构建前端生产包
+    -   `npm run lint`：运行 ESLint（如果在 package.json 中配置）
+    -   `npm run format`：运行 Prettier 格式化（如果在 package.json 中配置）
+-   `service-manage`：
+    -   `npm run start:dev`：启动后端开发服务器
+    -   `npm run build`：构建后端生产包
+    -   `npm run start:prod`：以生产方式运行后端
 
-```bash
-npm run format
-```
+## 开发说明与约定
 
-### 代码检查
+-   前端主要技术：React、TypeScript、Vite、Ant Design、Tailwind、Zustand。
+-   后端主要技术：NestJS、Mongoose（MongoDB）、JWT 验证。
+-   状态管理：使用 `Zustand` 在 `back-manage/src/store` 维护简易的问卷编辑状态。
 
-项目使用 ESLint 进行代码检查，可以通过以下命令检查代码：
+## 调试与验证
 
-```bash
-npm run lint
-```
+-   开发时建议在浏览器打开 `http://localhost:5173` 并在控制台观察前端日志。
+-   如果遇到路由或 API 错误，请确认 `service-manage` 是否已启动并正常连接。
 
-## 部署
+## 常见问题
 
-### 前端部署
+-   启动报错或依赖问题：尝试删除 `node_modules` 并重新安装（`npm ci` 或 `npm install`）。
+-   端口冲突：修改对应服务的端口或停止占用端口的进程。
 
-构建生产版本：
+## 贡献与规范
 
-```bash
-cd back-manage
-npm run build
-```
+-   欢迎提交 PR，请保持代码风格和提交信息清晰。
+-   建议在提交前运行 `npm run lint` 和 `npm run format`（各子项目中可能存在脚本）。
+
+## 许可
+
+本项目供学习和参考使用，具体使用请遵循团队及组织的许可要求。
 
 构建产物将位于 `back-manage/dist/` 目录中，可以部署到任何静态文件服务器上。
-
-### 后端部署
-
-构建生产版本：
-
-```bash
-cd service-manage
-npm run build
-```
-
-启动生产环境：
-
-```bash
-npm run start:prod
-```
-
-## 许可证
-
-本项目仅供学习和参考使用。
