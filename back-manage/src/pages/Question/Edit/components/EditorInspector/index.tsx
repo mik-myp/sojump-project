@@ -1,6 +1,7 @@
 import { FileTextOutlined, SettingOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 import AttributeSetting from './AttributeSetting';
+import PageSetting from './PageSetting';
 
 const EditorInspector = () => {
   return (
@@ -17,7 +18,7 @@ const EditorInspector = () => {
             key: '2',
             label: '页面设置',
             icon: <SettingOutlined />,
-            children: <div>页面设置</div>,
+            children: <PageSetting />,
           },
         ]}
       />

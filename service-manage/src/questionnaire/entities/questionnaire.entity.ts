@@ -26,6 +26,12 @@ export class Questionnaire {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User', required: true })
   userId: Types.ObjectId;
 
+  @Prop({ type: Object, default: { px: 8, py: 0 } })
+  pageSetting?: {
+    px: number;
+    py: number;
+  };
+
   createdAt?: Date;
   updatedAt?: Date;
 }

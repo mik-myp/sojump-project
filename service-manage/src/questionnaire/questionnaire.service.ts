@@ -28,6 +28,7 @@ export class QuestionnaireService {
       isDeleted: false,
       answerCount: 0,
       userId,
+      pageSetting: { px: 8, py: 0 },
     });
 
     return { code: 0, data: { id: doc._id }, message: 'success' };
@@ -87,7 +88,15 @@ export class QuestionnaireService {
 
     const payload: Record<string, unknown> = {};
     (
-      ['title', 'componentList', 'isPublished', 'isStar', 'isDeleted', 'answerCount'] as const
+      [
+        'title',
+        'componentList',
+        'isPublished',
+        'isStar',
+        'isDeleted',
+        'answerCount',
+        'pageSetting',
+      ] as const
     ).forEach(key => {
       const value = updateQuestionnaireDto[key];
       if (value !== undefined) {
@@ -172,6 +181,7 @@ export class QuestionnaireService {
       isDeleted: false,
       answerCount: 0,
       userId,
+      pageSetting: questionnaire.pageSetting || { px: 8, py: 0 },
     });
 
     return { code: 0, data: { id: duplicated._id }, message: 'success' };

@@ -20,8 +20,11 @@ export type TComponentType = 'questionTitle' | 'questionInput';
 
 export interface IComponent {
   id?: string;
+  title?: string;
   type?: TComponentType;
   props?: Record<string, unknown>;
+  show?: boolean;
+  lock?: boolean;
 }
 
 export interface IQuestion {
@@ -34,6 +37,10 @@ export interface IQuestion {
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  pageSetting?: {
+    px: number;
+    py: number;
+  };
 }
 
 export type TQuestionsInfiniteData = {

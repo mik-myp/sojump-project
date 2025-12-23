@@ -18,4 +18,9 @@ export class CreateQuestionnaireDto {
 
   @ApiPropertyOptional({ description: '总答案计数', default: 0 })
   answerCount?: number;
+  @ApiPropertyOptional({ description: '页面设置', default: { px: 8, py: 0 } })
+  pageSetting?: {
+    px: number;
+    py: number;
+  };
 }

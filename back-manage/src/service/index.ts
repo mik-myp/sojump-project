@@ -41,11 +41,13 @@ export async function getQuestions(data: IQuestionParams) {
 export async function updateQuestion(
   data: Partial<IQuestion> & {
     id: string;
+    autoSave?: boolean;
   },
 ) {
+  const { autoSave, ...rest } = data;
   return request<IQuestion>(`/question/${data.id}`, {
     method: 'PATCH',
-    data: data,
+    data: rest,
   });
 }
 

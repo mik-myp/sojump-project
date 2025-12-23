@@ -1,11 +1,11 @@
-import QuestionInput, {
+import {
   defaultInputProps,
-  type TQuestionInputProps,
-} from '@/components/QuestionComponents/QuestionInput';
-import QuestionTitle, {
   defaultTitleProps,
+  QuestionInput,
+  QuestionTitle,
+  type TQuestionInputProps,
   type TQuestionTitleProps,
-} from '@/components/QuestionComponents/QuestionTitle';
+} from '@/components/QuestionComponents';
 import { useQuestionStore } from '@/store';
 import generateId from '@/utils/generateId';
 import type React from 'react';
@@ -15,11 +15,13 @@ type TComponentItem =
       type: 'questionTitle';
       component: React.ComponentType<TQuestionTitleProps>;
       defaultProps: TQuestionTitleProps;
+      title: string;
     }
   | {
       type: 'questionInput';
       component: React.ComponentType<TQuestionInputProps>;
       defaultProps: TQuestionInputProps;
+      title: string;
     };
 
 // 定义组件组
@@ -34,6 +36,7 @@ const COMPONENT_GROUP: {
     components: [
       {
         type: 'questionTitle',
+        title: '标题组件',
         component: QuestionTitle,
         defaultProps: defaultTitleProps,
       },
@@ -45,6 +48,7 @@ const COMPONENT_GROUP: {
     components: [
       {
         type: 'questionInput',
+        title: '输入框组件',
         component: QuestionInput,
         defaultProps: defaultInputProps,
       },
@@ -55,11 +59,13 @@ const COMPONENT_GROUP: {
 const ComponentLibrary = () => {
   const { addQuestionComponent } = useQuestionStore();
 
-  const handleAdd = ({ type, defaultProps }: TComponentItem) => {
+  const handleAdd = ({ type, defaultProps, title }: TComponentItem) => {
     addQuestionComponent({
       id: generateId(),
       type,
+      title,
       props: defaultProps,
+      show: true,
     });
   };
 

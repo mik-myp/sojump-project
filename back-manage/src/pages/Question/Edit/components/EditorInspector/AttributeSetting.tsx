@@ -1,16 +1,17 @@
-import QuestionInputSetting from '@/components/QuestionComponents/QuestionInput/Setting';
-import QuestionTitleSetting from '@/components/QuestionComponents/QuestionTitle/Setting';
+import { QuestionInputSetting, QuestionTitleSetting } from '@/components/QuestionComponents';
 import { useQuestionStore } from '@/store';
-import { Form } from 'antd';
+import { Form, type FormProps } from 'antd';
 import { useEffect } from 'react';
 
 const AttributeSetting = () => {
   const { currentQuestionComponent, saveCurrentQuestionComponent } = useQuestionStore();
   const [form] = Form.useForm();
 
-  const { type, props } = currentQuestionComponent || {};
+  const { type, props, lock } = currentQuestionComponent || {};
 
-  const handleValuesChange = (_changedFields: any, allFields: any) => {
+  const disabled = lock || !currentQuestionComponent?.id;
+
+  const handleValuesChange: FormProps['onValuesChange'] = (_changedFields, allFields) => {
     saveCurrentQuestionComponent({
       ...currentQuestionComponent,
       props: allFields,
@@ -20,7 +21,8 @@ const AttributeSetting = () => {
   useEffect(() => {
     form.resetFields();
     form.setFieldsValue({ ...props });
-  }, [currentQuestionComponent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestionComponent?.id]);
 
   const renderSetting = () => {
     switch (type) {
@@ -34,7 +36,7 @@ const AttributeSetting = () => {
   };
 
   return (
-    <Form form={form} onValuesChange={handleValuesChange} layout="vertical">
+    <Form form={form} onValuesChange={handleValuesChange} layout="vertical" disabled={disabled}>
       {renderSetting()}
     </Form>
   );

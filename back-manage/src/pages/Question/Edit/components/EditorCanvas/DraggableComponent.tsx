@@ -1,11 +1,10 @@
-import QuestionInput from '@/components/QuestionComponents/QuestionInput';
-import QuestionTitle from '@/components/QuestionComponents/QuestionTitle';
+import { QuestionInput, QuestionTitle } from '@/components/QuestionComponents';
 import type { IComponent, TComponentType } from '@/service/interface';
 import { useQuestionStore } from '@/store';
 import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 
-export const COMPONENT_MAP: Record<TComponentType, React.ComponentType<Record<string, unknown>>> = {
+const COMPONENT_MAP: Record<TComponentType, React.ComponentType<Record<string, unknown>>> = {
   questionTitle: QuestionTitle,
   questionInput: QuestionInput,
 };
@@ -20,13 +19,15 @@ const DraggableComponent = ({ component, index }: { component: IComponent; index
   };
 
   return (
-    <Draggable draggableId={component.id!} index={index}>
+    <Draggable draggableId={component.id!} index={index} isDragDisabled={component.lock}>
       {provided => (
         <div
           className={classNames(
             'p-3 border border-solid border-white hover:border-[#d9d9d9] rounded-sm w-full',
             {
               ['border-[#69B1FF]!']: component.id === currentQuestionComponent.id,
+              'cursor-grab!': !component.lock,
+              'cursor-not-allowed!': component.lock,
             },
           )}
           key={component.id}
