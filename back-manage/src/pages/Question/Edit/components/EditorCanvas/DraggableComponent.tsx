@@ -1,14 +1,9 @@
-import { QuestionInput, QuestionTitle } from '@/components/QuestionComponents';
-import type { IComponent, TComponentType } from '@/service/interface';
+import type { IComponent } from '@/service/interface';
 import { useQuestionStore } from '@/store';
 import classNames from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-
-const COMPONENT_MAP: Record<TComponentType, React.ComponentType<Record<string, unknown>>> = {
-  questionTitle: QuestionTitle,
-  questionInput: QuestionInput,
-};
+import { renderComponent } from '@/components/QuestionComponents';
 
 const DraggableComponent = ({ component }: { component: IComponent }) => {
   const { currentQuestionComponent, saveCurrentQuestionComponent } = useQuestionStore();
@@ -22,7 +17,6 @@ const DraggableComponent = ({ component }: { component: IComponent }) => {
   const style = {
     transform: CSS.Transform.toString(transformWithoutScale),
     transition,
-    marginBottom: '12px',
   };
   const handleSelect = () => {
     saveCurrentQuestionComponent(component);
@@ -35,17 +29,11 @@ const DraggableComponent = ({ component }: { component: IComponent }) => {
   const draggableProps = component.lock
     ? {}
     : { ...attributes, ...restListeners, onPointerDown: handlePointerDown };
-  const renderComponent = (component: IComponent) => {
-    const Component = COMPONENT_MAP[component.type!];
-    if (!Component) return null;
-
-    return <Component {...((component.props as Record<string, unknown>) ?? {})} />;
-  };
 
   return (
     <div
       className={classNames(
-        'p-3 border border-solid border-white hover:border-[#d9d9d9] rounded-sm w-full',
+        'p-3 border border-solid border-white hover:border-[#d9d9d9] rounded-sm w-full mb-3',
         {
           ['border-[#69B1FF]!']: component.id === currentQuestionComponent.id,
           'cursor-grab!': !component.lock,

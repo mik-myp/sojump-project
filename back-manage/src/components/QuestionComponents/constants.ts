@@ -1,4 +1,4 @@
-import type { TQuestionInputProps, TQuestionTitleProps } from "./interface";
+import type { TQuestionInputProps, TQuestionTitleProps } from './interface';
 
 export const defaultInputProps: TQuestionInputProps = {
   title: '输入框标题',

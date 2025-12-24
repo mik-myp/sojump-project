@@ -130,7 +130,7 @@ const EditorHeader = ({
   return (
     <>
       <div className="w-100 flex items-center gap-2">
-        <Button type="link" icon={<LeftOutlined />} onClick={() => navigate(-1)}>
+        <Button type="link" icon={<LeftOutlined />} onClick={() => navigate('/manage/list')}>
           返回
         </Button>
         <Typography.Text

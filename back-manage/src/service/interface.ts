@@ -10,10 +10,17 @@ export interface IUserInfo {
   updatedAt?: string;
 }
 
-export interface IQuestionParams {
+export interface IPageParams {
   page?: number;
   pageSize?: number;
+}
+
+export interface IQuestionParams extends IPageParams {
   isDeleted?: boolean;
+}
+
+export interface IAnswerParams extends IPageParams {
+  id: string;
 }
 
 export type TComponentType = 'questionTitle' | 'questionInput';

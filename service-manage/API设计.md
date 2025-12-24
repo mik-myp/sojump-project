@@ -66,3 +66,20 @@ PS：删除是`假删除`，实际是更新 `isDeleted` 属性
 - method `post`
 - path `/api/question/duplicate/:id`
 - response: `{ code: 0, data: { id } }`
+
+## 填问卷功能
+
+填写问卷功能，对问卷的操作也是对当前用户的问卷进行操作，不会影响其他用户的问卷
+
+### 填写问卷
+
+- method `post`
+- path `/api/answer/:id`
+- request body `{ answers: { [key] : value } }`
+- response: `{ code: 0 }`
+
+## 获取问卷填写结果列表
+
+- method `get`
+- path `/api/answer/:id`
+- response: `{ code: 0, data: { list: [ ... ], total } }`

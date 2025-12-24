@@ -1,5 +1,11 @@
 import request from '@/utils/request';
-import type { ILoginParams, IUserInfo, IQuestion, IQuestionParams } from './interface';
+import type {
+  ILoginParams,
+  IUserInfo,
+  IQuestion,
+  IQuestionParams,
+  IAnswerParams,
+} from './interface';
 
 export async function login(data: ILoginParams) {
   return request<{ token: string }>('/user/login', {
@@ -79,5 +85,15 @@ export async function copyQuestion(data: { id: string }) {
 export async function getQuestion(data: { id: string }) {
   return request<IQuestion>(`/question/${data.id}`, {
     method: 'GET',
+  });
+}
+
+export async function getAnswers(data: IAnswerParams) {
+  return request<{
+    list: Record<string, unknown>[];
+    total: number;
+  }>('/answer', {
+    method: 'GET',
+    params: data,
   });
 }

@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongodbDbName, mongodbUrl } from 'config';
 import { QuestionnaireModule } from './questionnaire/questionnaire.module';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { QuestionnaireModule } from './questionnaire/questionnaire.module';
     }),
     UserModule,
     QuestionnaireModule,
+    AnswerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

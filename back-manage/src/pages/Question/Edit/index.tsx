@@ -1,7 +1,7 @@
-import { useParams } from 'react-router';
+import { useOutletContext } from 'react-router';
 import { Layout, message, Spin, theme } from 'antd';
 import { useInterval, useRequest } from 'ahooks';
-import { getQuestion, updateQuestion } from '@/service';
+import { updateQuestion } from '@/service';
 import { useQuestionStore } from '@/store';
 import EditorHeader from './components/EditorHeader';
 import EditorSidebar from './components/EditorSidebar';
@@ -13,21 +13,13 @@ const Edit = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const { questionInfo, initQuestionInfo, clearHistory, clearCurrentQuestionComponent } =
-    useQuestionStore();
+  const { questionInfo, clearHistory, clearCurrentQuestionComponent } = useQuestionStore();
 
-  const { id } = useParams();
-
-  const { loading, refresh } = useRequest(getQuestion, {
-    defaultParams: [
-      {
-        id: id!,
-      },
-    ],
-    onSuccess: res => {
-      initQuestionInfo(res);
-    },
-  });
+  const { id, loading, refresh } = useOutletContext<{
+    id: string;
+    loading: boolean;
+    refresh: () => void;
+  }>();
 
   const { run: updateRun, loading: updateLoading } = useRequest(updateQuestion, {
     manual: true,
