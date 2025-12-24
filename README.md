@@ -26,7 +26,7 @@ Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布�
     -   样式：Tailwind CSS
     -   路由：React Router
     -   状态管理：Zustand
-    -   常用库：react-beautiful-dnd、ahooks、axios
+    -   常用库：@dnd-kit、ahooks、axios
 
 -   后端（service-manage）
 

@@ -66,7 +66,7 @@ VITE_API_BASE=http://localhost:3000
 
 - React, TypeScript, Vite
 - Ant Design, Tailwind CSS
-- react-beautiful-dnd（拖拽）、ahooks、axios
+- @dnd-kit（拖拽）、ahooks、axios
 - Zustand（状态管理）
 
 ## 贡献

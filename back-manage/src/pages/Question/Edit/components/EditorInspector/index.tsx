@@ -1,12 +1,13 @@
 import { FileTextOutlined, SettingOutlined } from '@ant-design/icons';
-import { Tabs } from 'antd';
+import StickyTabs from '@/components/StickyTabs';
 import AttributeSetting from './AttributeSetting';
 import PageSetting from './PageSetting';
 
 const EditorInspector = () => {
   return (
-    <div className="w-100 bg-white px-4">
-      <Tabs
+    <div className="w-100 bg-white px-2 h-full">
+      <StickyTabs
+        sticky
         items={[
           {
             key: '1',

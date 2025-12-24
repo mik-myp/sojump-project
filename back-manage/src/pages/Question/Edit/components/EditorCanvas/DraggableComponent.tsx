@@ -2,15 +2,39 @@ import { QuestionInput, QuestionTitle } from '@/components/QuestionComponents';
 import type { IComponent, TComponentType } from '@/service/interface';
 import { useQuestionStore } from '@/store';
 import classNames from 'classnames';
-import { Draggable } from 'react-beautiful-dnd';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const COMPONENT_MAP: Record<TComponentType, React.ComponentType<Record<string, unknown>>> = {
   questionTitle: QuestionTitle,
   questionInput: QuestionInput,
 };
 
-const DraggableComponent = ({ component, index }: { component: IComponent; index: number }) => {
+const DraggableComponent = ({ component }: { component: IComponent }) => {
   const { currentQuestionComponent, saveCurrentQuestionComponent } = useQuestionStore();
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: component.id!,
+    disabled: component.lock,
+  });
+  const transformWithoutScale = transform
+    ? { ...transform, scaleX: 1, scaleY: 1, scaleZ: 1 }
+    : null;
+  const style = {
+    transform: CSS.Transform.toString(transformWithoutScale),
+    transition,
+    marginBottom: '12px',
+  };
+  const handleSelect = () => {
+    saveCurrentQuestionComponent(component);
+  };
+  const { onPointerDown, ...restListeners } = listeners || {};
+  const handlePointerDown: React.PointerEventHandler<HTMLDivElement> = event => {
+    onPointerDown?.(event);
+    if (!event.defaultPrevented) handleSelect();
+  };
+  const draggableProps = component.lock
+    ? {}
+    : { ...attributes, ...restListeners, onPointerDown: handlePointerDown };
   const renderComponent = (component: IComponent) => {
     const Component = COMPONENT_MAP[component.type!];
     if (!Component) return null;
@@ -19,30 +43,22 @@ const DraggableComponent = ({ component, index }: { component: IComponent; index
   };
 
   return (
-    <Draggable draggableId={component.id!} index={index} isDragDisabled={component.lock}>
-      {provided => (
-        <div
-          className={classNames(
-            'p-3 border border-solid border-white hover:border-[#d9d9d9] rounded-sm w-full',
-            {
-              ['border-[#69B1FF]!']: component.id === currentQuestionComponent.id,
-              'cursor-grab!': !component.lock,
-              'cursor-not-allowed!': component.lock,
-            },
-          )}
-          key={component.id}
-          onClick={() => {
-            saveCurrentQuestionComponent(component);
-          }}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          style={{ ...provided.draggableProps.style, marginBottom: '12px' }}
-        >
-          <div className="pointer-events-none">{renderComponent(component)}</div>
-        </div>
+    <div
+      className={classNames(
+        'p-3 border border-solid border-white hover:border-[#d9d9d9] rounded-sm w-full',
+        {
+          ['border-[#69B1FF]!']: component.id === currentQuestionComponent.id,
+          'cursor-grab!': !component.lock,
+          'cursor-not-allowed!': component.lock,
+        },
       )}
-    </Draggable>
+      {...draggableProps}
+      onClick={handleSelect}
+      ref={setNodeRef}
+      style={style}
+    >
+      <div className="pointer-events-none flex-1">{renderComponent(component)}</div>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import DroppableComponentList from '@/components/DroppableComponentList';
 import useDropEnd from '@/hooks/useDropEnd';
 import useLock from '@/hooks/useLock';
 import useShow from '@/hooks/useShow';
+import type { IComponent } from '@/service/interface';
 import { useQuestionStore } from '@/store';
 import {
   EyeInvisibleOutlined,
@@ -12,7 +13,92 @@ import {
 } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import classNames from 'classnames';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+const LayerItem = ({
+  component,
+  currentId,
+  onSelect,
+  onToggleShow,
+  onToggleLock,
+}: {
+  component: IComponent;
+  currentId?: string;
+  onSelect: (component: IComponent) => void;
+  onToggleShow: (id: string) => void;
+  onToggleLock: (id: string) => void;
+}) => {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } =
+    useSortable({
+      id: component.id!,
+      disabled: component.lock,
+    });
+  const transformWithoutScale = transform
+    ? { ...transform, scaleX: 1, scaleY: 1, scaleZ: 1 }
+    : null;
+  const style = {
+    transform: CSS.Transform.toString(transformWithoutScale),
+    transition,
+    marginBottom: '12px',
+  };
+
+  return (
+    <div
+      className="w-full flex justify-between items-center px-3 h-10 bg-white rounded-lg shadow-sm"
+      ref={setNodeRef}
+      style={style}
+    >
+      <div className={classNames('flex gap-2 items-center')}>
+        <HolderOutlined
+          ref={setActivatorNodeRef}
+          {...(!component.lock ? { ...attributes, ...listeners } : {})}
+          className={classNames({
+            'cursor-grab!': !component.lock,
+            'cursor-not-allowed!': component.lock,
+          })}
+        />
+        <span
+          onClick={() => {
+            if (!component.show) return;
+            onSelect(component);
+          }}
+          className={classNames('cursor-pointer! select-none', {
+            ['text-[#69B1FF]!']: component.id === currentId,
+          })}
+        >
+          {component.title}
+        </span>
+      </div>
+      <div className="flex gap-2">
+        <div className="cursor-pointer!" onClick={() => onToggleShow(component.id!)}>
+          {component.show ? (
+            <Tooltip title="隐藏">
+              <EyeInvisibleOutlined />
+            </Tooltip>
+          ) : (
+            <Tooltip title="显示">
+              <EyeOutlined />
+            </Tooltip>
+          )}
+        </div>
+        <div className="cursor-pointer!" onClick={() => onToggleLock(component.id!)}>
+          {component.lock ? (
+            <Tooltip title="解锁">
+              <UnlockOutlined />
+            </Tooltip>
+          ) : (
+            <Tooltip title="锁定">
+              <LockOutlined />
+            </Tooltip>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Layer = () => {
   const dragDropEnd = useDropEnd();
@@ -20,101 +106,32 @@ const Layer = () => {
   const changeComponentLock = useLock();
 
   const { currentQuestionComponent, saveCurrentQuestionComponent } = useQuestionStore();
+  const sensors = useSensors(useSensor(PointerSensor));
 
   return (
     <>
-      <DragDropContext onDragEnd={dragDropEnd}>
-        <Droppable
-          droppableId="list"
-          isDropDisabled={false}
-          isCombineEnabled={false}
-          ignoreContainerClipping={false}
-          direction="vertical"
-        >
-          {provided => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="flex flex-col py-3"
-            >
-              <DroppableComponentList
-                renderComponent={(component, index) => {
-                  return (
-                    <Draggable
-                      draggableId={component.id!}
-                      index={index}
-                      key={component.id}
-                      isDragDisabled={component.lock}
-                    >
-                      {provided => (
-                        <div
-                          key={component.id}
-                          className="w-full flex justify-between items-center px-3 h-10 bg-white rounded-lg shadow-sm"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          style={{ ...provided.draggableProps.style, marginBottom: '12px' }}
-                        >
-                          <div className={classNames('flex gap-2 items-center')}>
-                            <HolderOutlined
-                              {...(!component.lock ? provided.dragHandleProps : {})}
-                              className={classNames({
-                                'cursor-grab!': !component.lock,
-                                'cursor-not-allowed!': component.lock,
-                              })}
-                            />
-                            <span
-                              onClick={() => {
-                                if (!component.show) return;
-                                saveCurrentQuestionComponent(component);
-                              }}
-                              className={classNames('cursor-pointer! select-none', {
-                                ['text-[#69B1FF]!']: component.id === currentQuestionComponent.id,
-                              })}
-                            >
-                              {component.title}
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            <div
-                              className="cursor-pointer!"
-                              onClick={() => changeComponentShow(component.id!)}
-                            >
-                              {component.show ? (
-                                <Tooltip title="隐藏">
-                                  <EyeInvisibleOutlined />
-                                </Tooltip>
-                              ) : (
-                                <Tooltip title="显示">
-                                  <EyeOutlined />
-                                </Tooltip>
-                              )}
-                            </div>
-                            <div
-                              className="cursor-pointer!"
-                              onClick={() => changeComponentLock(component.id!)}
-                            >
-                              {component.lock ? (
-                                <Tooltip title="解锁">
-                                  <UnlockOutlined />
-                                </Tooltip>
-                              ) : (
-                                <Tooltip title="锁定">
-                                  <LockOutlined />
-                                </Tooltip>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                }}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={dragDropEnd}
+        modifiers={[restrictToVerticalAxis]}
+      >
+        <div className="flex flex-col">
+          <DroppableComponentList
+            renderComponent={component => (
+              <LayerItem
+                key={component.id}
+                component={component}
+                currentId={currentQuestionComponent.id}
+                onSelect={saveCurrentQuestionComponent}
+                onToggleShow={changeComponentShow}
+                onToggleLock={changeComponentLock}
               />
-              <div style={{ marginBottom: '12px' }}>{provided.placeholder}</div>
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+            )}
+          />
+          <div style={{ marginBottom: '12px' }} />
+        </div>
+      </DndContext>
     </>
   );
 };
