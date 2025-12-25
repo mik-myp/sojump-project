@@ -16,7 +16,7 @@ cd back-manage
 npm install
 ```
 
-2. 启动开发服务器（默认端口 5173）：
+2. 启动开发服务器（默认端口 5173，`/api` 由 Vite 代理到后端 8888）：
 
 ```bash
 npm run dev
@@ -38,12 +38,12 @@ npm run preview
 
 前端使用 Vite，支持通过 `.env` 文件注入变量，常用：
 
-- `VITE_API_BASE` - 后端 API 根地址（例如 `http://localhost:3000`）
+- `VITE_BASE_API` - 后端 API 根地址。开发默认 `/api`，由 `vite.config.ts` 代理到 `http://localhost:8888`；部署时可改为真实地址（如 `https://api.example.com`）。
 
 示例 `.env`：
 
 ```
-VITE_API_BASE=http://localhost:3000
+VITE_BASE_API=/api
 ```
 
 ## 常用脚本
@@ -58,7 +58,7 @@ VITE_API_BASE=http://localhost:3000
 
 ## 开发调试建议
 
-- 确保后端服务 `service-manage` 在本地启动并且 `VITE_API_BASE` 指向正确地址。
+- 确保后端服务 `service-manage` 在本地启动并且 `VITE_BASE_API` 指向正确地址（默认 `/api` 代理到 8888）。
 - 可在浏览器打开 `http://localhost:5173` 进行调试。控制台可查看网络请求与日志。
 - 常见热更新、样式问题请检查 Tailwind 与 PostCSS 配置。
 
@@ -76,4 +76,4 @@ VITE_API_BASE=http://localhost:3000
 
 ## 其它
 
-如需在不同环境运行或调试某些功能（Mock、代理等），可查看 `vite.config.ts` 中的 proxy 配置或新增 `.env` 文件覆盖 `VITE_API_BASE`。
+如需在不同环境运行或调试某些功能（Mock、代理等），可查看 `vite.config.ts` 中的 proxy 配置或新增 `.env` 文件覆盖 `VITE_BASE_API`。

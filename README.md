@@ -59,7 +59,7 @@ npm install
 npm run start:dev
 ```
 
-默认后端地址：`http://localhost:3000`
+默认后端地址：`http://localhost:8888`（Swagger 文档 `/docs`）
 
 在另一个终端启动前端：
 
@@ -69,9 +69,9 @@ npm install
 npm run dev
 ```
 
-默认前端地址：`http://localhost:5173`
+默认前端地址：`http://localhost:5173`（开发环境下 `/api` 会被代理到本地后端 8888，变量 `VITE_BASE_API` 可在 `.env` 中覆盖）。
 
-如果你只想启动前端（通常本地用 mock 或已连接后端），进入 `back-manage` 并运行 `npm run dev` 即可。
+如果你只想启动前端（通常本地用 mock 或已连接后端），进入 `back-manage` 并运行 `npm run dev` 即可；按需调整 `VITE_BASE_API` 指向真实后端。
 
 ## 常用脚本
 

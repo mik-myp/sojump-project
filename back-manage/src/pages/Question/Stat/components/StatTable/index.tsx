@@ -1,6 +1,6 @@
 import { getAnswers } from '@/service';
 import { useQuestionStore } from '@/store';
-import { useAntdTable, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { Table } from 'antd';
 import classNames from 'classnames';
 import { useMemo } from 'react';
@@ -13,9 +13,7 @@ const TITLE_MAP = {
 
 const StatTable = () => {
   const { questionInfo, currentQuestionComponent, answerList, saveAnswerList } = useQuestionStore();
-
   const { componentList } = questionInfo;
-
   const { id } = useParams();
 
   const { loading } = useRequest(getAnswers, {
@@ -30,9 +28,11 @@ const StatTable = () => {
   });
 
   const columns = useMemo(() => {
+    if (!componentList?.length) return [];
+
     return componentList
-      ?.filter(item => item.show)
-      ?.map(item => {
+      .filter(item => item.show)
+      .map(item => {
         return {
           title: (
             <div
@@ -40,7 +40,7 @@ const StatTable = () => {
                 'text-blue-500': item.id === currentQuestionComponent.id,
               })}
             >
-              {item.props![TITLE_MAP[item.type!]] as string}
+              {(item.props?.[TITLE_MAP[item.type!]] as string) ?? '--'}
             </div>
           ),
           dataIndex: item.id,
@@ -55,7 +55,7 @@ const StatTable = () => {
   return (
     <div className="overflow-x-auto flex-1 mx-4">
       <Table
-        dataSource={answerList.concat(answerList)}
+        dataSource={answerList}
         loading={loading}
         rowKey="_id"
         columns={columns}

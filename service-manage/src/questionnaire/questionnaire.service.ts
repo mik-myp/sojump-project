@@ -41,13 +41,21 @@ export class QuestionnaireService {
         ? Number(query.pageSize)
         : 10;
 
-    const filter: Record<string, unknown> & { userId: string } = { userId };
+    const filter: Record<string, unknown> & { userId: string; isDeleted: boolean } = {
+      userId,
+      isDeleted: false,
+    };
 
     if (typeof query.isDeleted === 'string') {
       filter.isDeleted = query.isDeleted === 'true';
+    } else if (typeof query.isDeleted === 'boolean') {
+      filter.isDeleted = query.isDeleted;
     }
+
     if (typeof query.isStar === 'string') {
       filter.isStar = query.isStar === 'true';
+    } else if (typeof query.isStar === 'boolean') {
+      filter.isStar = query.isStar;
     }
 
     const [list, total] = await Promise.all([

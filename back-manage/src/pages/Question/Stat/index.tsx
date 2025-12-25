@@ -1,7 +1,7 @@
 import { Layout, Spin, theme } from 'antd';
 import StatHeader from './components/StatHeader';
 import StatQuestion from './components/StatQuestion';
-import StatTable from './components/StatTable/index.';
+import StatTable from './components/StatTable';
 import StatEcharts from './components/StatEcharts';
 import { useOutletContext } from 'react-router';
 

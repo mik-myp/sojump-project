@@ -4,15 +4,22 @@ import { usePagination } from 'ahooks';
 import { Empty, Pagination, Spin } from 'antd';
 
 const List = () => {
-  const { data, loading, pagination, refresh } = usePagination(getQuestions, {
-    defaultParams: [
-      {
-        isStar: true,
-        current: 1,
-        pageSize: 10,
-      },
-    ],
-  });
+  const { data, loading, pagination, refresh } = usePagination(
+    ({ current, ...rest }) =>
+      getQuestions({
+        ...rest,
+        page: current,
+      }),
+    {
+      defaultParams: [
+        {
+          isStar: true,
+          current: 1,
+          pageSize: 10,
+        },
+      ],
+    },
+  );
 
   const list = data?.list || [];
   return (
