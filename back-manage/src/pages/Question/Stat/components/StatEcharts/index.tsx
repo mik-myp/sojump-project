@@ -1,44 +1,56 @@
-import { Column } from '@ant-design/plots';
-const data = [
-  { type: '1-3秒', value: 0.16 },
-  { type: '4-10秒', value: 0.125 },
-  { type: '11-30秒', value: 0.24 },
-  { type: '31-60秒', value: 0.19 },
-  { type: '1-3分', value: 0.22 },
-  { type: '3-10分', value: 0.05 },
-  { type: '10-30分', value: 0.01 },
-  { type: '30+分', value: 0.015 },
-];
-const StatEcharts = () => {
-  const config = {
-    data,
-    xField: 'type',
-    yField: 'value',
-    style: {
-      fill: ({ type }) => {
-        if (type === '10-30分' || type === '30+分') {
-          return '#22CBCC';
-        }
-        return '#2989FF';
-      },
-    },
-    label: {
-      text: originData => {
-        const val = parseFloat(originData.value);
-        if (val < 0.05) {
-          return (val * 100).toFixed(1) + '%';
-        }
-        return '';
-      },
-      offset: 10,
-    },
-    legend: false,
-  };
+import { useQuestionStore } from '@/store';
+import { Column, Line, Pie } from '@ant-design/plots';
+import { useMemo } from 'react';
 
-  return (
-    <div className="w-1/4 bg-white px-2 h-full">
-      <Column {...config} />
-    </div>
-  );
+const StatEcharts = () => {
+  const {
+    currentQuestionComponent,
+    answerList,
+    questionInfo: { componentList = [] } = {},
+  } = useQuestionStore();
+
+  const data = useMemo(() => {
+    const currentData = answerList.map(item => item[currentQuestionComponent.id!]).filter(Boolean);
+    const currentObj = currentData.reduce((acc: Record<string, number>, cur) => {
+      acc[cur as string] = (acc[cur as string] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // 将统计结果转换为图表需要的数据格式
+    return Object.entries(currentObj).map(([type, count]) => ({
+      type,
+      value: count,
+    }));
+  }, [answerList, currentQuestionComponent.id]);
+
+  const renderChart = useMemo(() => {
+    const config = {
+      data,
+      xField: 'type',
+      yField: 'value',
+      legend: true,
+    };
+    let chartIndex = componentList.findIndex(item => item.id === currentQuestionComponent.id);
+    if (chartIndex > -1) {
+      chartIndex = chartIndex % 3;
+    } else {
+      chartIndex = 0;
+    }
+    switch (chartIndex) {
+      case 0:
+        return <Column {...config} />;
+      case 1:
+        return <Line {...config} />;
+      case 2:
+        return <Pie data={data} angleField={config.yField} colorField={config.xField} />;
+      default:
+        return <Column {...config} />;
+    }
+  }, [data, currentQuestionComponent.id, componentList]);
+
+  return currentQuestionComponent.id && data.length ? (
+    <div className="w-1/4 max-w-200 bg-white px-2 h-full">{renderChart}</div>
+  ) : null;
 };
+
 export default StatEcharts;

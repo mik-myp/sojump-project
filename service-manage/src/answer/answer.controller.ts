@@ -21,17 +21,7 @@ export class AnswerController {
   @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: '获取答卷列表（需登录）' })
-  findAll(
-    @Req() req: AuthedRequest,
-    @Query('id') id: string,
-    @Query('page') page?: string,
-    @Query('pageSize') pageSize?: string,
-  ) {
-    return this.answerService.findAll(
-      id,
-      req.user?._id ?? '',
-      page ? Number(page) : undefined,
-      pageSize ? Number(pageSize) : undefined,
-    );
+  findAll(@Req() req: AuthedRequest, @Query('id') id: string) {
+    return this.answerService.findAll(id, req.user?._id ?? '');
   }
 }

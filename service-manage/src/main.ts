@@ -4,6 +4,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token'],
+  });
+
   const config = new DocumentBuilder()
     .setTitle('API 文档')
     .setDescription('接口说明')
@@ -12,8 +18,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document); // http://localhost:3000/docs
+  SwaggerModule.setup('docs', app, document); // http://localhost:8888/docs
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8888);
 }
 bootstrap();

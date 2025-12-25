@@ -1,11 +1,5 @@
 import request from '@/utils/request';
-import type {
-  ILoginParams,
-  IUserInfo,
-  IQuestion,
-  IQuestionParams,
-  IAnswerParams,
-} from './interface';
+import type { ILoginParams, IUserInfo, IQuestion, IQuestionParams, IAnswer } from './interface';
 
 export async function login(data: ILoginParams) {
   return request<{ token: string }>('/user/login', {
@@ -88,11 +82,8 @@ export async function getQuestion(data: { id: string }) {
   });
 }
 
-export async function getAnswers(data: IAnswerParams) {
-  return request<{
-    list: Record<string, unknown>[];
-    total: number;
-  }>('/answer', {
+export async function getAnswers(data: { id: string }) {
+  return request<IAnswer[]>('/answer', {
     method: 'GET',
     params: data,
   });

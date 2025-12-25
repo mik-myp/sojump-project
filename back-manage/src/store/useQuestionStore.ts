@@ -1,5 +1,10 @@
+import type { IAnswer } from './../service/interface';
 import type { IComponent, IQuestion } from '@/service/interface';
 import { create } from 'zustand';
+
+export type TAnswerList = Omit<IAnswer, 'answers'> & {
+  [key: string]: unknown;
+};
 
 export type TQuestionStore = {
   questionInfo: IQuestion;
@@ -15,6 +20,8 @@ export type TQuestionStore = {
   undo: () => void;
   redo: () => void;
   clearHistory: () => void;
+  answerList: TAnswerList[];
+  saveAnswerList: (answerList: TAnswerList[]) => void;
 };
 
 const questionInfo: IQuestion = {
@@ -26,6 +33,13 @@ const useQuestionStore = create<TQuestionStore>(set => ({
   currentQuestionComponent: {},
   past: [],
   future: [],
+  answerList: [],
+  saveAnswerList: (answerList: TAnswerList[]) =>
+    set(() => {
+      return {
+        answerList,
+      };
+    }),
   saveQuestionInfo: (question, recordHistory = true) =>
     set(state => {
       const prev = state.questionInfo;

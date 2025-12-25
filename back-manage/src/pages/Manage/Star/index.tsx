@@ -22,7 +22,7 @@ const List = () => {
         {list.length > 0 ? (
           <>
             <div
-              className="flex flex-col gap-4 pb-2.5 max-h-260 overflow-auto"
+              className="flex flex-col gap-4 pb-2.5 h-240 overflow-auto"
               style={{
                 scrollbarWidth: 'none',
               }}

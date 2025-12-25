@@ -50,7 +50,7 @@ const List = () => {
           style={{
             scrollbarWidth: 'none',
           }}
-          className="h-250 overflow-auto"
+          className="h-240 overflow-auto"
           ref={ref}
         >
           {list.length === 0 ? (

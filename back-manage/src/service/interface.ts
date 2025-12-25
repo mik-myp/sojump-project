@@ -19,10 +19,6 @@ export interface IQuestionParams extends IPageParams {
   isDeleted?: boolean;
 }
 
-export interface IAnswerParams extends IPageParams {
-  id: string;
-}
-
 export type TComponentType = 'questionTitle' | 'questionInput';
 
 export interface IComponent {
@@ -55,3 +51,11 @@ export type TQuestionsInfiniteData = {
   total: number;
   page: number;
 };
+
+export interface IAnswer {
+  _id: string;
+  answers?: Record<string, unknown>;
+  createdAt?: string;
+  updatedAt?: string;
+  questionnaireId?: string;
+}

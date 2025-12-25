@@ -54,9 +54,11 @@ const StatHeader = () => {
         </Popover>
       </Flex>
       <div className="w-100 flex items-center gap-2 justify-end">
-        <Button type="primary" onClick={() => navigate(`/question/edit/${questionInfo?._id}`)}>
-          编辑问卷
-        </Button>
+        {questionInfo.isPublished ? null : (
+          <Button type="primary" onClick={() => navigate(`/question/edit/${questionInfo?._id}`)}>
+            编辑问卷
+          </Button>
+        )}
       </div>
     </>
   );

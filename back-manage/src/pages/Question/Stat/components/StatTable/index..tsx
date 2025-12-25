@@ -1,6 +1,6 @@
 import { getAnswers } from '@/service';
 import { useQuestionStore } from '@/store';
-import { useAntdTable } from 'ahooks';
+import { useAntdTable, useRequest } from 'ahooks';
 import { Table } from 'antd';
 import classNames from 'classnames';
 import { useMemo } from 'react';
@@ -12,53 +12,58 @@ const TITLE_MAP = {
 };
 
 const StatTable = () => {
-  const { questionInfo, currentQuestionComponent } = useQuestionStore();
+  const { questionInfo, currentQuestionComponent, answerList, saveAnswerList } = useQuestionStore();
 
   const { componentList } = questionInfo;
 
   const { id } = useParams();
 
-  const { tableProps, refresh } = useAntdTable(getAnswers, {
+  const { loading } = useRequest(getAnswers, {
     defaultParams: [
       {
         id: id!,
-        current: 1,
-        pageSize: 10,
       },
     ],
+    onSuccess: res => {
+      saveAnswerList(res.map(item => ({ ...item, ...(item.answers || {}) })));
+    },
   });
 
-  console.log('🚀 ~ index..tsx:31 ~ StatTable ~ tableProps:', tableProps);
-
   const columns = useMemo(() => {
-    return componentList?.map(item => {
-      return {
-        title: (
-          <div
-            className={classNames({
-              'text-blue-500': item.id === currentQuestionComponent.id,
-            })}
-          >
-            {item.props![TITLE_MAP[item.type!]] as string}
-          </div>
-        ),
-        dataIndex: item.id,
-      };
-    });
+    return componentList
+      ?.filter(item => item.show)
+      ?.map(item => {
+        return {
+          title: (
+            <div
+              className={classNames({
+                'text-blue-500': item.id === currentQuestionComponent.id,
+              })}
+            >
+              {item.props![TITLE_MAP[item.type!]] as string}
+            </div>
+          ),
+          dataIndex: item.id,
+          width: 200,
+          render: (text: string) => {
+            return text ?? '--';
+          },
+        };
+      });
   }, [componentList, currentQuestionComponent.id]);
 
   return (
-    <div className="flex-1 mx-4">
+    <div className="overflow-x-auto flex-1 mx-4">
       <Table
-        {...tableProps}
+        dataSource={answerList.concat(answerList)}
+        loading={loading}
         rowKey="_id"
         columns={columns}
+        pagination={false}
         scroll={{
-          x: true,
-          y: 500,
+          y: '85vh',
+          x: 'max-content',
         }}
-        dataSource={[]}
-        size="middle"
       />
     </div>
   );

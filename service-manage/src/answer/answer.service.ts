@@ -41,7 +41,7 @@ export class AnswerService {
     return { code: 0, data: null, message: 'success' };
   }
 
-  async findAll(questionnaireId: string, userId: string, page?: number, pageSize?: number) {
+  async findAll(questionnaireId: string, userId: string) {
     if (!Types.ObjectId.isValid(questionnaireId)) {
       throw new HttpException({ code: 404, message: '问卷不存在', data: null }, HttpStatus.OK);
     }
@@ -59,22 +59,10 @@ export class AnswerService {
       );
     }
 
-    const currentPage = Number.isFinite(page) && (page as number) > 0 ? Number(page) : 1;
-    const currentPageSize =
-      Number.isFinite(pageSize) && (pageSize as number) > 0 ? Number(pageSize) : 10;
-
     const filter = { questionnaireId };
 
-    const [list, total] = await Promise.all([
-      this.answerModel
-        .find(filter)
-        .sort({ createdAt: -1 })
-        .skip((currentPage - 1) * currentPageSize)
-        .limit(currentPageSize)
-        .exec(),
-      this.answerModel.countDocuments(filter),
-    ]);
+    const data = await this.answerModel.find(filter).sort({ createdAt: -1 }).exec();
 
-    return { code: 0, data: { list, total }, message: 'success' };
+    return { code: 0, data, message: 'success' };
   }
 }

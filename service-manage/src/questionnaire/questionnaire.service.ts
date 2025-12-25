@@ -21,7 +21,7 @@ export class QuestionnaireService {
 
   async create(userId: string) {
     const doc = await this.questionnaireModel.create({
-      title: `新建 ${Date.now()}`,
+      title: `新建问卷 ${Date.now()}`,
       componentList: [],
       isPublished: false,
       isStar: false,
@@ -72,6 +72,24 @@ export class QuestionnaireService {
       _id: id,
       userId,
       isDeleted: false,
+    });
+
+    if (!questionnaire) {
+      return { code: 404, message: '未找到问卷', data: null };
+    }
+
+    return { code: 0, data: questionnaire, message: 'success' };
+  }
+
+  async findOneNoAuth(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      return { code: 404, message: '未找到问卷', data: null };
+    }
+
+    const questionnaire = await this.questionnaireModel.findOne({
+      _id: id,
+      isDeleted: false,
+      isPublished: true,
     });
 
     if (!questionnaire) {

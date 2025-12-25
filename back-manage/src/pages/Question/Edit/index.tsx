@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 import { Layout, message, Spin, theme } from 'antd';
 import { useInterval, useRequest } from 'ahooks';
 import { updateQuestion } from '@/service';
@@ -14,6 +14,7 @@ const Edit = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const { questionInfo, clearHistory, clearCurrentQuestionComponent } = useQuestionStore();
+  const navigate = useNavigate();
 
   const { id, loading, refresh } = useOutletContext<{
     id: string;
@@ -51,6 +52,7 @@ const Edit = () => {
       componentList,
       isPublished: true,
     });
+    navigate('/manage/list');
   };
 
   const clearInterval = useInterval(() => handleSave(true), 30000, {

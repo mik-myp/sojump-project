@@ -6,15 +6,24 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 
 const Trash = () => {
-  const { tableProps, refresh } = useAntdTable(getQuestions, {
-    defaultParams: [
-      {
-        isDeleted: true,
-        current: 1,
-        pageSize: 10,
-      },
-    ],
-  });
+  const { tableProps, refresh } = useAntdTable(
+    ({ current, pageSize, isDeleted }) => {
+      return getQuestions({
+        page: current,
+        pageSize,
+        isDeleted,
+      });
+    },
+    {
+      defaultParams: [
+        {
+          isDeleted: true,
+          current: 1,
+          pageSize: 10,
+        },
+      ],
+    },
+  );
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
