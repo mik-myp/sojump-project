@@ -1,57 +1,29 @@
 # Sojump 问卷调查系统
 
-<p align="center">
-  <img src="./back-manage/public/sojump.jpg" alt="Sojump Logo" width="120" />
-</p>
+现代化的问卷系统，前后端分离：前端管理端（编辑器/管理台）、答题端，以及 NestJS 提供的后端 API。
 
-<p align="center">
-  一款现代化的问卷调查系统，基于React和NestJS构建
-</p>
+## 子项目
 
-## 项目简介
+-   `back-manage/`：前端管理端（React + Vite）
+-   `answer-manage/`：问卷答题端（Next.js App Router）
+-   `service-manage/`：后端服务（NestJS + MongoDB）
 
-Sojump 是一个功能完整的问卷调查系统，允许用户创建、发布和管理各种类型的问卷调查。系统采用前后端分离架构，前端使用 React 构建，后端使用 NestJS 提供 RESTful API 服务。
+## 技术栈
 
-## 目录结构（简要）
+-   前端：React、TypeScript、Ant Design、Tailwind CSS、ahooks、Zustand
+-   后端：NestJS、TypeScript、MongoDB (Mongoose)、JWT、Swagger
+-   构建/工具：Vite、Next.js、ESLint、Prettier、Jest（后端示例）
 
--   `back-manage/`：前端项目（React + TypeScript + Vite）
--   `service-manage/`：后端项目（NestJS）
+## 快速开始（本地）
 
-## 使用的技术栈
-
--   前端（back-manage）
-
-    -   React, TypeScript, Vite
-    -   UI：Ant Design
-    -   样式：Tailwind CSS
-    -   路由：React Router
-    -   状态管理：Zustand
-    -   常用库：@dnd-kit、ahooks、axios
-
--   后端（service-manage）
-
-    -   NestJS, TypeScript
-    -   数据库：MongoDB + Mongoose
-    -   认证：JWT
-    -   文档：Swagger
-
--   开发/工具链
-    -   代码检查：ESLint
-    -   代码格式化：Prettier
-    -   包管理/运行：npm / Node.js
-    -   测试：Jest (后端 e2e 示例)
-
-## 快速开始（本地开发）
-
-先克隆项目并安装根依赖：
+1. 克隆并安装根依赖（子项目需单独安装依赖）：
 
 ```bash
 git clone <repository-url>
 cd sojump-project
-npm install
 ```
 
-启动后端（开发模式）：
+2. 启动后端（默认端口 8888，Swagger `/docs`）：
 
 ```bash
 cd service-manage
@@ -59,9 +31,7 @@ npm install
 npm run start:dev
 ```
 
-默认后端地址：`http://localhost:8888`（Swagger 文档 `/docs`）
-
-在另一个终端启动前端：
+3. 启动前端管理端（默认端口 5173，`/api` 代理到 8888）：
 
 ```bash
 cd back-manage
@@ -69,47 +39,45 @@ npm install
 npm run dev
 ```
 
-默认前端地址：`http://localhost:5173`（开发环境下 `/api` 会被代理到本地后端 8888，变量 `VITE_BASE_API` 可在 `.env` 中覆盖）。
+4. 启动答题端（默认端口 3000，直连后端接口）：
 
-如果你只想启动前端（通常本地用 mock 或已连接后端），进入 `back-manage` 并运行 `npm run dev` 即可；按需调整 `VITE_BASE_API` 指向真实后端。
+```bash
+cd answer-manage
+npm install
+npm run dev
+```
+
+## 环境变量
+
+-   `back-manage`：`VITE_BASE_API`（默认 `/api`，由 Vite 代理到 `http://localhost:8888`）
+-   `answer-manage`：`NEXT_PUBLIC_SERVICE_BASE_URL`（默认 `http://localhost:8888`）
+-   `service-manage`：端口可用 `PORT` 覆盖（默认 8888）；Mongo/JWT 配置见 `service-manage/config/index.ts`
+
+本地开发示例：
+
+```
+# answer-manage/.env.local
+NEXT_PUBLIC_SERVICE_BASE_URL=http://localhost:8888
+```
 
 ## 常用脚本
 
--   根目录：
-    -   `npm install`：安装根依赖（如果需要）
--   `back-manage`：
-    -   `npm run dev`：启动前端开发服务器
-    -   `npm run build`：构建前端生产包
-    -   `npm run lint`：运行 ESLint（如果在 package.json 中配置）
-    -   `npm run format`：运行 Prettier 格式化（如果在 package.json 中配置）
--   `service-manage`：
-    -   `npm run start:dev`：启动后端开发服务器
-    -   `npm run build`：构建后端生产包
-    -   `npm run start:prod`：以生产方式运行后端
+-   back-manage：`npm run dev` / `build` / `preview` / `lint`
+-   answer-manage：`npm run dev` / `build` / `start` / `lint`
+-   service-manage：`npm run start:dev` / `build` / `start:prod` / `test`
 
-## 开发说明与约定
+## 目录概览
 
--   前端主要技术：React、TypeScript、Vite、Ant Design、Tailwind、Zustand。
--   后端主要技术：NestJS、Mongoose（MongoDB）、JWT 验证。
--   状态管理：使用 `Zustand` 在 `back-manage/src/store` 维护简易的问卷编辑状态。
+-   `back-manage/src`：管理端页面、组件、状态（Zustand）、网络请求。
+-   `answer-manage/app`：答题端页面；`components/QuestionComponents` 渲染题型；`types/` 类型定义。
+-   `service-manage/src`：NestJS 模块（用户/问卷/答卷）、守卫与配置。
 
-## 调试与验证
+## 调试与提示
 
--   开发时建议在浏览器打开 `http://localhost:5173` 并在控制台观察前端日志。
--   如果遇到路由或 API 错误，请确认 `service-manage` 是否已启动并正常连接。
+-   访问管理端 `http://localhost:5173`；发布问卷后在答题端访问 `http://localhost:3000/question/<id>` 填写。
+-   后端已开启 CORS；开发环境前端通过代理或直接配置后端地址。
+-   确保 MongoDB 可用，`service-manage/config/index.ts` 中的地址/库名正确。
 
-## 常见问题
+## 贡献
 
--   启动报错或依赖问题：尝试删除 `node_modules` 并重新安装（`npm ci` 或 `npm install`）。
--   端口冲突：修改对应服务的端口或停止占用端口的进程。
-
-## 贡献与规范
-
--   欢迎提交 PR，请保持代码风格和提交信息清晰。
--   建议在提交前运行 `npm run lint` 和 `npm run format`（各子项目中可能存在脚本）。
-
-## 许可
-
-本项目供学习和参考使用，具体使用请遵循团队及组织的许可要求。
-
-构建产物将位于 `back-manage/dist/` 目录中，可以部署到任何静态文件服务器上。
+-   欢迎 Issue / PR。
